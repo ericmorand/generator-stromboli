@@ -1,0 +1,19 @@
+{
+  "name": "<%= projectName %>",
+  "version": "<%= projectVersion %>",
+  "description": "<%= projectDescription %>",
+  "author": "<%= projectAuthor %>",
+  "dependencies": {},
+  "devDependencies": {
+    "browser-sync": "^2.16.0",
+    "merge": "^1.2.0",
+    "stromboli": "*",
+    "stromboli-plugin-handlebars": "*",
+    "stromboli-plugin-javascript": "*",
+    "stromboli-plugin-sass": "*"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
