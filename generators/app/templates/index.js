@@ -1,5 +1,6 @@
 'use strict';
 
+var fs = require('fs');
 var path = require('path');
 var merge = require('merge');
 var config = require('./config.js');
@@ -12,27 +13,34 @@ class Builder extends Stromboli {
     super();
 
     this.componentsWatchers = new Map();
+    this.browserSync = null;
   };
 
   start(config) {
+    var that = this;
+
     return super.start(config).then (
       function (components) {
-        var browserSync = require('browser-sync').create();
-        var files = [];
+        var output = '<ul>';
 
         components.forEach(function (component) {
-          files.push(path.join('dist', component.name, 'index.css'));
-          files.push(path.join('dist', component.name, 'index.js'));
-          files.push(path.join('dist', component.name, 'index.html'));
+          output += '<li><a href="' + component.name + '">' + component.name + '</a></li>';
         });
+
+        output += '</ul>';
+
+        fs.writeFile(path.join('dist', 'index.html'), output);
+
+        var bs = require('browser-sync').create();
 
         var browserSyncConfig = merge(config.browsersync, {
           server: 'dist',
-          files: files,
           open: false
         });
 
-        return browserSync.init(browserSyncConfig);
+        bs.init(browserSyncConfig, function() {
+          that.browserSync = bs;
+        });
       }
     )
   };
@@ -105,7 +113,6 @@ class Builder extends Stromboli {
       function (component) {
         var renderResult = component.renderResults.get(plugin.name);
 
-        var watcher = null;
         var dependencies = Array.from(renderResult.getDependencies());
 
         if (!that.componentsWatchers.has(component.name)) {
@@ -116,11 +123,21 @@ class Builder extends Stromboli {
 
         that.debug('WATCHER WILL WATCH', dependencies, 'USING PLUGIN', plugin.name);
 
-        watcher = that.getWatcher(dependencies, function () {
+        var watcher = that.getWatcher(dependencies, function () {
           that.pluginRenderComponent(plugin, component)
         });
 
         componentWatchers.set(plugin.name, watcher);
+
+        if (that.browserSync) {
+          var binaries = renderResult.getBinaries();
+
+          binaries.forEach(function (binary) {
+            if (binary.name != 'index.map') {
+              that.browserSync.reload(path.join(component.name, binary.name));
+            }
+          });
+        }
 
         return component;
       }
