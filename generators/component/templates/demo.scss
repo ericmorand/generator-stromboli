@@ -1,1 +1,24 @@
 @import "index";
+@import "../demo/index";
+
+.demo {
+  @at-root {
+    .demo-content {
+      @include primary-font();
+    }
+  }
+
+  .demo-content {
+    > div {
+      margin-bottom: 20px;
+
+      &:after {
+        @include clear-float;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

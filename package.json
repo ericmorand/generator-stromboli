@@ -45,7 +45,6 @@
   },
   "repository": "ericmorand/generator-stromboli",
   "scripts": {
-    "prepublish": "gulp prepublish",
     "test": "gulp"
   },
   "license": "Apache-2.0"

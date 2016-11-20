@@ -1,43 +1,26 @@
 @import "index.scss";
 @import "../demo/index";
 
-.demo {
-  @at-root {
-    .demo-content {
-      @include primary-font();
+.demo-content {
+  > div {
+    margin-bottom: 20px;
+
+    &:after {
+      @include clear-float;
     }
-  }
 
-  .demo-content {
-    > div {
-      margin-bottom: 20px;
-
-      &:after {
-        @include clear-float;
-      }
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-  }
-
-  @at-root {
-    .font-header {
-      @include float(left);
+    &:last-child {
+      margin-bottom: 0;
     }
   }
 
   .font-header {
+    @include float(left);
     width: 25%;
-  }
-  @at-root {
-    .font-demo {
-      @include float(right);
-    }
   }
 
   .font-demo {
+    @include float(right);
     width: 75%;
   }
 }

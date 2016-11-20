@@ -13,7 +13,7 @@
     "stromboli": "^0.7.1",
     "stromboli-plugin-twig": "^0.6.2",
     "stromboli-plugin-javascript": "^0.4.0",
-    "stromboli-plugin-sass": "^0.6.2",
+    "stromboli-plugin-sass": "^0.6.3",
     "vue": "^2.0.8"
   },
   "scripts": {

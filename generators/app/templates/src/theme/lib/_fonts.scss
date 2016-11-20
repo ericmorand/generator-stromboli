@@ -20,9 +20,9 @@ $fontWeights: (
 
     @font-face {
       font-family: 'Primary';
-      src: url("../assets/fonts/Roboto/Roboto-#{$fontFileName}.ttf") format("truetype");
-      font-weight: $fontWeight;
       font-style: $fontStyle;
+      font-weight: $fontWeight;
+      src: url("../assets/fonts/Roboto/Roboto-#{$fontFileName}.ttf") format("truetype");
     }
   }
 }
@@ -44,9 +44,9 @@ $fontWeights: (
 
     @font-face {
       font-family: 'PrimaryArabic';
-      src: url("../assets/fonts/Cairo/Cairo-#{$fontFileName}.ttf") format("truetype");
-      font-weight: $fontWeight;
       font-style: $fontStyle;
+      font-weight: $fontWeight;
+      src: url("../assets/fonts/Cairo/Cairo-#{$fontFileName}.ttf") format("truetype");
     }
   }
 }

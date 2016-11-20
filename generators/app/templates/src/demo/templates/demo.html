@@ -1,11 +1,15 @@
-<div class="demo" v-cloak>
-    <div class="header">
+<div class="demo">
+    <div class="demo-header">
         <h1>{{ title }}</h1>
-        <language-selector v-bind:language="currentLanguage" v-bind:languages="languages"></language-selector>
+        <language-selector v-bind:language="language" v-bind:languages="languages"></language-selector>
     </div>
-    <section v-for="language in languages" v-show="language.code == currentLanguage.code"  class="content" v-bind:lang="language.code" v-bind:dir="language.direction">
-        <slot v-bind:name="'content-' + language.code">
-            This will only be displayed if there is no content to be distributed.
-        </slot>
-    </section>
+    <div v-bind:lang="language.code" v-bind:dir="language.direction" v-cloak>
+        <div class="demo-body">
+            <section v-for="aLanguage in languages" v-show="aLanguage.code == language.code" class="content">
+                <slot v-bind:name="'content-' + aLanguage.code">
+                    This will only be displayed if there is no content to be distributed.
+                </slot>
+            </section>
+        </div>
+    </div>
 </div>
