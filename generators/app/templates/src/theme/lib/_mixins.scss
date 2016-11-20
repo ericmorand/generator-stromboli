@@ -1,0 +1,39 @@
+@mixin primary-font($style: normal, $weight: 400) {
+  font-family: 'Primary', sans-serif;
+  font-weight: $weight;
+  font-style: $style;
+
+  [lang="ar"] &, [lang="he"] & {
+    font-family: 'PrimaryArabic', sans-serif;
+  }
+}
+
+@mixin float($value) {
+  float: $value;
+
+  [dir="rtl"] & {
+    @if ($value == left) {
+      float: right;
+    } @else if ($value == right) {
+      float: left;
+    }
+  }
+}
+
+@mixin text-align($value) {
+  text-align: $value;
+
+  [dir="rtl"] & {
+    @if ($value == left) {
+      text-align: right;
+    } @else if ($value == right) {
+      text-align: left;
+    }
+  }
+}
+
+@mixin clear-float() {
+  content: "";
+  display: block;
+  clear: both;
+}

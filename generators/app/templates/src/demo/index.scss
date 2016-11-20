@@ -1,0 +1,41 @@
+@import "../theme/lib/mixins";
+
+.demo {
+  font-family: 'sans-serif';
+  padding: 16px;
+
+  h1, h2, h3 {
+    margin: 0;
+  }
+
+  > .header {
+    border: none;
+    margin-bottom: 20px;
+    border-bottom: solid 5px #eee;
+
+    h1 {
+      font-size: 48px;
+      @include float(left);
+    }
+
+    .language-selector {
+      @include float(right);
+    }
+
+    &:after {
+      @include clear-float();
+    }
+  }
+
+  h2 {
+    border: none;
+    margin-bottom: 20px;
+    font-size: 32px;
+  }
+
+  .demo-content {
+    margin-bottom: 20px;
+    border: solid 3px #f7f7f9;
+    padding: 20px;
+  }
+}

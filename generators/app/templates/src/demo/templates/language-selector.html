@@ -1,0 +1,5 @@
+<div class="language-selector">
+    <select v-model="language.code">
+        <option v-for="language in languages" v-bind:value="language.code">{{ language.name }}</option>
+    </select>
+</div>

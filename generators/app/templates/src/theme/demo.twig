@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>theme demo</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+<div id="app">
+    <demo title="theme demo" v-bind:languages="{{ languages|json_encode|escape }}">
+        {% for language in languages %}
+            <div slot="content-{{ language.code }}" class="demo-content">
+                <h2>Fonts</h2>
+                {% for font in fonts %}
+                    <div style="font-weight: {{ font.weight }}; font-style: {{ font.style }}">
+                        <div class="font-header">
+                            <h3>{{ font.weight }} - {{ font.style }}</h3>
+                        </div>
+                        <div class="font-demo">
+                            <span>{{ language.lorem }}</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </demo>
+</div>
+<script src="index.js"></script>
+</body>
+</html>

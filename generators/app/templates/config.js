@@ -1,25 +1,89 @@
-module.exports = {
-  projectName: '<%= projectName %>',
-  projectVersion: '<%= projectVersion %>',
-  projectDescription: '<%= projectDescription %>',
+var merge = require('merge');
+
+var common = {
+  componentRoot: 'src',
+  componentManifest: 'component.json',
   plugins: {
     javascript: {
-      module: require('stromboli-plugin-javascript'),
-      entry: 'demo.js'
+      module: require('stromboli-plugin-javascript')
     },
-    handlebars: {
-      module: require('stromboli-plugin-handlebars'),
-      entry: 'demo.hbs'
+    twig: {
+      module: require('stromboli-plugin-twig')
     },
     sass: {
       module: require('stromboli-plugin-sass'),
       config: {
-        precision: 8,
-        sourceMap: true,
-        sourceComments: true
-      },
-      entry: 'demo.scss'
+        precision: 8
+      }
     }
-  },
-  browsersync: {}
+  }
+};
+
+module.exports = {
+  build: merge.recursive(true, common, {
+    plugins: {
+      javascript: {
+        entry: 'index.js',
+        config: {
+          plugin: [
+            function (bundle, opts) {
+              return require('minifyify')(bundle, {map: false});
+            }
+          ]
+        }
+      },
+      twig: {
+        entry: 'index.twig'
+      },
+      sass: {
+        config: {
+          sourceMap: false,
+          sourceComments: false
+        },
+        entry: 'index.scss'
+      }
+    }
+  }),
+  develop: merge.recursive(true, common, {
+    plugins: {
+      javascript: {
+        entry: 'demo.js',
+        config: {
+          transform: [
+            ['stringify', {
+              appliesTo: {
+                includeExtensions: ['html']
+              }
+            }],
+            ['aliasify', {
+              aliases: {
+                'vue': 'vue/dist/vue'
+              }
+            }]
+          ]
+        }
+      },
+      twig: {
+        entry: 'demo.twig'
+      },
+      sass: {
+        config: {
+          sourceMap: true,
+          sourceComments: true
+        },
+        entry: 'demo.scss'
+      }
+    },
+    browserSync: {
+      port: 3000,
+      open: false,
+      notify: false
+    },
+    chokidar: {
+      ignoreInitial: true,
+      awaitWriteFinish: {
+        stabilityThreshold: 100
+      }
+    }
+  })
 };

@@ -17,32 +17,37 @@ module.exports = yeoman.Base.extend({
         type: 'input',
         name: 'componentName',
         message: 'Name of the component',
-        default: 'awesome/component'
+        default: path.basename(process.cwd())
       },
       {
         type: 'input',
         name: 'componentDescription',
         message: 'Description of the component',
-        default: 'Such an awesome component'
+        default: path.basename(process.cwd())
+      },
+      {
+        type: 'input',
+        name: 'componentAuthor',
+        message: 'Author of the component',
+        store: true
       }
     ];
 
     return this.prompt(prompts).then(function (props) {
       // To access props later use this.props.someAnswer;
       this.props = props;
-      this.props.componentEntry = path.basename(props.componentName);
     }.bind(this));
   },
 
   writing: function () {
     var data = {
       componentName: this.props.componentName,
+      componentDescription: this.props.componentDescription,
       componentVersion: '0.1.0',
-      componentAuthors: 'Eric MORAND',
-      componentEntry: this.props.componentEntry
+      componentAuthors: this.props.componentAuthor,
     };
 
-    this.destinationRoot(path.join('src', this.props.componentName));
+    this.destinationRoot('.');
 
     this.fs.copyTpl(
       this.templatePath('component.json'),
@@ -50,9 +55,15 @@ module.exports = yeoman.Base.extend({
       data
     );
 
+    this.fs.copyTpl(
+      this.templatePath('demo.data.js'),
+      this.destinationPath('demo.data.js'),
+      data
+    );
+
     var that = this;
 
-    ['hbs', 'js', 'scss'].forEach(function (ext) {
+    ['twig', 'js', 'scss'].forEach(function (ext) {
       that.fs.copyTpl(
         that.templatePath('demo.' + ext),
         that.destinationPath('demo.' + ext),
@@ -60,10 +71,10 @@ module.exports = yeoman.Base.extend({
       );
     });
 
-    ['hbs', 'js', 'scss'].forEach(function (ext) {
+    ['twig', 'js', 'scss'].forEach(function (ext) {
       that.fs.copyTpl(
-        that.templatePath('entry.' + ext),
-        that.destinationPath(that.props.componentEntry + '.' + ext),
+        that.templatePath('index.' + ext),
+        that.destinationPath('index.' + ext),
         data
       );
     });

@@ -5,13 +5,16 @@
   "author": "<%= projectAuthor %>",
   "dependencies": {},
   "devDependencies": {
+    "aliasify": "^2.1.0",
     "browser-sync": "^2.16.0",
     "chokidar": "^1.6.0",
     "merge": "^1.2.0",
-    "stromboli": "*",
-    "stromboli-plugin-handlebars": "*",
-    "stromboli-plugin-javascript": "*",
-    "stromboli-plugin-sass": "*"
+    "stringify": "^5.1.0",
+    "stromboli": "^0.7.1",
+    "stromboli-plugin-twig": "^0.6.2",
+    "stromboli-plugin-javascript": "^0.4.0",
+    "stromboli-plugin-sass": "^0.6.2",
+    "vue": "^2.0.8"
   },
   "scripts": {
     "start": "node index.js",
