@@ -41,8 +41,8 @@ module.exports = yeoman.Base.extend({
   configuring: function () {
     this.fs.copy(this.templatePath('build.js'), this.destinationPath('build.js'));
     this.fs.copy(this.templatePath('index.js'), this.destinationPath('index.js'));
-    this.fs.copy(this.templatePath('.editorconfig'), this.destinationPath('.editorconfig'));
-    this.fs.copy(this.templatePath('.gitignore'), this.destinationPath('.gitignore'));
+    this.fs.copy(this.templatePath('editorconfig.txt'), this.destinationPath('.editorconfig'));
+    this.fs.copy(this.templatePath('gitignore.txt'), this.destinationPath('.gitignore'));
     this.fs.copy(this.templatePath('lib/'), this.destinationPath('lib/'));
     this.fs.copy(this.templatePath('src/'), this.destinationPath('src/'));
   },
