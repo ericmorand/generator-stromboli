@@ -22,7 +22,7 @@
     "detergent": "^2.16.0",
     "fs-extra": "^1.0.0",
     "speakingurl": "^10.0.0",
-    "yeoman-generator": "^0.23.0",
+    "yeoman-generator-ahead": "^0.2.0",
     "yosay": "^1.0.0"
   },
   "devDependencies": {

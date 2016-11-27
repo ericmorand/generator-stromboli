@@ -1,5 +1,5 @@
 'use strict';
-var yeoman = require('yeoman-generator');
+var yeoman = require('yeoman-generator-ahead');
 var chalk = require('chalk');
 var yosay = require('yosay');
 var path = require('path');
@@ -82,10 +82,8 @@ module.exports = yeoman.Base.extend({
   },
 
   last: function () {
-    this.config.set('demo', path.join(this.destinationPath(), 'src/demo'));
+    this.config.set('demo', 'src/demo');
     this.config.save();
-
-    console.log (this.config.getAll());
 
     this.log(yosay(
       'Done! Launch ' + chalk.red('npm start') + ' and code!'

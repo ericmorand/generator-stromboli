@@ -1,6 +1,6 @@
 'use strict';
 
-var yeoman = require('yeoman-generator');
+var yeoman = require('yeoman-generator-ahead');
 var chalk = require('chalk');
 var yosay = require('yosay');
 var path = require('path');
@@ -19,13 +19,13 @@ module.exports = yeoman.Base.extend({
         type: 'input',
         name: 'componentName',
         message: 'Name of the component',
-        default: path.basename(process.cwd())
+        default: path.basename(this.contextRoot)
       },
       {
         type: 'input',
         name: 'componentDescription',
         message: 'Description of the component',
-        default: path.basename(process.cwd())
+        default: path.basename(this.contextRoot)
       },
       {
         type: 'input',
@@ -37,8 +37,8 @@ module.exports = yeoman.Base.extend({
         type: 'input',
         name: 'demoComponentRoot',
         message: 'Directory where the demo component is located',
-        default: 'src/demo',
-        store: true
+        store: true,
+        default: 'src/demo'
       }
     ];
 
@@ -49,8 +49,9 @@ module.exports = yeoman.Base.extend({
   },
 
   writing: function () {
-    var demoComponentRoot = this.config.get('demo');
-    var demoComponentRootRelativePath = path.relative(process.cwd(), demoComponentRoot);
+    var demoComponentRoot = path.join(this.env.cwd, this.config.get('demo'));
+
+    this.destinationRoot(this.contextRoot);
 
     var data = {
       componentName: this.props.componentName,
@@ -58,10 +59,8 @@ module.exports = yeoman.Base.extend({
       componentVersion: '0.1.0',
       componentAuthors: this.props.componentAuthor,
       componentCleanName: getSlug(this.props.componentName),
-      demoComponentRootRelativePath: demoComponentRootRelativePath
+      demoComponentRootRelativePath: path.relative(this.contextRoot, demoComponentRoot)
     };
-
-    this.destinationRoot('.');
 
     this.fs.copyTpl(
       this.templatePath('component.json'),
