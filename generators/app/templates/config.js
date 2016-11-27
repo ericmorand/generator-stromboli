@@ -1,6 +1,8 @@
-var merge = require('merge');
+'use strict';
 
-var common = {
+let merge = require('merge');
+
+let common = {
   componentRoot: 'src',
   componentManifest: 'component.json',
   plugins: {

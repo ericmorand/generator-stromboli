@@ -12,7 +12,20 @@ describe('generator-stromboli:app', function () {
 
   it('creates files', function () {
     assert.file([
-      'dummyfile.txt'
+      'build.js',
+      'config.js',
+      '.editorconfig',
+      '.gitignore',
+      'index.js',
+      'package.json',
+      'README.md',
+      '.yo-rc.json'
     ]);
+
+    assert.jsonFileContent('.yo-rc.json', {
+      'generator-stromboli': {
+        demo: path.join(process.cwd(), 'src/demo')
+      }
+    });
   });
 });

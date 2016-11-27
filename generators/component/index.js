@@ -4,6 +4,8 @@ var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var yosay = require('yosay');
 var path = require('path');
+var getSlug = require('speakingurl');
+var fs = require('fs-extra');
 
 module.exports = yeoman.Base.extend({
   prompting: function () {
@@ -30,6 +32,13 @@ module.exports = yeoman.Base.extend({
         name: 'componentAuthor',
         message: 'Author of the component',
         store: true
+      },
+      {
+        type: 'input',
+        name: 'demoComponentRoot',
+        message: 'Directory where the demo component is located',
+        default: 'src/demo',
+        store: true
       }
     ];
 
@@ -40,11 +49,16 @@ module.exports = yeoman.Base.extend({
   },
 
   writing: function () {
+    var demoComponentRoot = this.config.get('demo');
+    var demoComponentRootRelativePath = path.relative(process.cwd(), demoComponentRoot);
+
     var data = {
       componentName: this.props.componentName,
       componentDescription: this.props.componentDescription,
       componentVersion: '0.1.0',
       componentAuthors: this.props.componentAuthor,
+      componentCleanName: getSlug(this.props.componentName),
+      demoComponentRootRelativePath: demoComponentRootRelativePath
     };
 
     this.destinationRoot('.');

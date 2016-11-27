@@ -1,3 +1,5 @@
+'use strict';
+
 const fs = require('fs-extra');
 const path = require('path');
 
@@ -5,17 +7,17 @@ const Promise = require('promise');
 const fsCopy = Promise.denodeify(fs.copy, 2);
 const fsOutputFile = Promise.denodeify(fs.outputFile, 3);
 
-var exports = function (renderResult, output) {
-  var promises = [];
+let exports = function (renderResult, output) {
+  let promises = [];
 
-  var result = {
+  let result = {
     dependencies: [],
     binaries: []
   };
 
   renderResult.getDependencies().forEach(function (dependency) {
-    var from = dependency;
-    var to = path.join(output, path.relative(path.resolve('.'), dependency));
+    let from = dependency;
+    let to = path.join(output, path.relative(path.resolve('.'), dependency));
 
     promises.push(fsCopy(from, to).then(
       function() {
@@ -32,8 +34,8 @@ var exports = function (renderResult, output) {
   });
 
   renderResult.getBinaries().forEach(function (binary) {
-    var data = binary.data;
-    var to = path.join(output, binary.name);
+    let data = binary.data;
+    let to = path.join(output, binary.name);
 
     promises.push(fsOutputFile(to, data).then(
       function() {

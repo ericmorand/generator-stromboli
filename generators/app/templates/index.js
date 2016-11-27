@@ -23,9 +23,9 @@ class Builder extends Stromboli {
   };
 
   start(config) {
-    var that = this;
-    var pkg = require('./package.json');
-    var length = Math.max(pkg.description.length, pkg.name.length);
+    let that = this;
+    let pkg = require('./package.json');
+    let length = Math.max(pkg.description.length, pkg.name.length);
 
     that.config = config;
 
@@ -38,7 +38,7 @@ class Builder extends Stromboli {
     return super.start(config).then(
       function (components) {
         // styleguide index
-        var output = '<html><meta name="viewport" content="width=device-width, initial-scale=1"><body><ul>';
+        let output = '<html><meta name="viewport" content="width=device-width, initial-scale=1"><body><ul>';
 
         components.forEach(function (component) {
           output += '<li><a href="' + path.join(component.name, component.path) + '">' + component.name + '</a></li>';
@@ -49,9 +49,9 @@ class Builder extends Stromboli {
         fs.writeFile(path.join(wwwPath, 'index.html'), output);
 
         // browserSync
-        var browserSync = require('browser-sync').create();
+        let browserSync = require('browser-sync').create();
 
-        var browserSyncConfig = merge(config.browserSync, {
+        let browserSyncConfig = merge(config.browserSync, {
           server: wwwPath
         });
 
@@ -64,15 +64,15 @@ class Builder extends Stromboli {
   };
 
   pluginPreRenderComponent(plugin, component) {
-    var that = this;
+    let that = this;
 
-    var promises = [];
+    let promises = [];
 
     // close watchers
-    var watcher = null;
+    let watcher = null;
 
     if (that.componentsWatchers.has(component.name)) {
-      var componentWatchers = that.componentsWatchers.get(component.name);
+      let componentWatchers = that.componentsWatchers.get(component.name);
 
       if (componentWatchers.has(plugin.name)) {
         console.log('WATCHER FOR COMPONENT', component.name, 'AND PLUGIN', plugin.name, 'WILL BE CLOSED');
@@ -87,27 +87,27 @@ class Builder extends Stromboli {
   };
 
   pluginRenderComponent(plugin, component) {
-    var that = this;
-    var pluginRenderComponent = super.pluginRenderComponent;
+    let that = this;
+    let pluginRenderComponent = super.pluginRenderComponent;
 
     return that.pluginPreRenderComponent(plugin, component).then(
       function () {
         return pluginRenderComponent.call(that, plugin, component).then(
           function (component) {
             // write plugin render result to wwwPath folder
-            var renderResult = component.renderResults.get(plugin.name);
+            let renderResult = component.renderResults.get(plugin.name);
 
             return write(renderResult, path.join(wwwPath, component.name, component.path)).then(
               function (files) {
                 // watch dependencies
-                var watcher = null;
-                var dependencies = Array.from(renderResult.getDependencies());
+                let watcher = null;
+                let dependencies = Array.from(renderResult.getDependencies());
 
                 if (!that.componentsWatchers.has(component.name)) {
                   that.componentsWatchers.set(component.name, new Map());
                 }
 
-                var componentWatchers = that.componentsWatchers.get(component.name);
+                let componentWatchers = that.componentsWatchers.get(component.name);
 
                 // console.log('WATCHER WILL WATCH', dependencies, 'USING PLUGIN', plugin.name);
 
@@ -145,7 +145,7 @@ class Builder extends Stromboli {
    * @returns {Promise}
    */
   getWatcher(files, listener) {
-    var that = this;
+    let that = this;
 
     return chokidar.watch(files, that.config.chokidar).on('all', function (type, file) {
       that.info(file, type);
@@ -155,6 +155,6 @@ class Builder extends Stromboli {
   };
 }
 
-var stromboli = new Builder();
+let stromboli = new Builder();
 
 stromboli.start(config);

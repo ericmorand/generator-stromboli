@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><%= componentName %> demo</title>
+  <title>lorem/ipsum demo</title>
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
 <div id="app">
-  <demo title="<%= componentName %> demo" v-bind:languages="{{ languages|json_encode|escape }}">
+  <demo title="lorem/ipsum demo" v-bind:languages="{{ languages|json_encode|escape }}">
     {% for language in languages %}
-      <div slot="content-{{ language.code }}" class="demo-content demo-<%= componentCleanName %>">
+      <div slot="content-{{ language.code }}" class="demo-content demo-lorem-ipsum">
         {% include "index.twig" %}
       </div>
     {% endfor %}

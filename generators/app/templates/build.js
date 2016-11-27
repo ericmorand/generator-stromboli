@@ -1,6 +1,6 @@
 'use strict';
 
-var config = require('./config.js').build;
+let config = require('./config.js').build;
 
 const fs = require('fs-extra');
 const path = require('path');
@@ -16,20 +16,20 @@ const fsRmdir = Promise.denodeify(fs.rmdir);
 
 const Stromboli = require('stromboli');
 
-var stromboli = new Stromboli();
+let stromboli = new Stromboli();
 
 config.componentRoot = 'src/page';
 
-var distPath = 'dist';
-var sourcePath = path.join(distPath, '/build');
-var targetPath = distPath;
-var buildPath = 'tmp/build';
+let distPath = 'dist';
+let sourcePath = path.join(distPath, '/build');
+let targetPath = distPath;
+let buildPath = 'tmp/build';
 
-var cleanDistFolder = function () {
+let cleanDistFolder = function () {
   return fsEmptyDir(distPath);
 };
 
-var write = require('./lib/write');
+let write = require('./lib/write');
 
 stromboli.getPlugins(config).then(
   function (plugins) {
@@ -37,13 +37,13 @@ stromboli.getPlugins(config).then(
       function (components) {
         // create build component from returned components
         plugins.forEach(function (plugin) {
-          var pluginData = '';
+          let pluginData = '';
 
           components.forEach(function (component) {
-            var sourceFile = path.join(component.path, plugin.entry);
+            let sourceFile = path.join(component.path, plugin.entry);
 
             try {
-              var sourceFileStat = fs.statSync(sourceFile);
+              let sourceFileStat = fs.statSync(sourceFile);
               if (sourceFileStat.isFile()) {
                 sourceFile = path.relative(buildPath, sourceFile);
 
@@ -80,7 +80,7 @@ stromboli.getPlugins(config).then(
               function () {
                 // write components output to 'dist' folder
                 return Promise.all(components.map(function (component) {
-                  var promises = [];
+                  let promises = [];
 
                   component.renderResults.forEach(function (renderResult, pluginName) {
                     promises.push(write(renderResult, path.join(distPath, component.name)));
@@ -89,10 +89,10 @@ stromboli.getPlugins(config).then(
                   return Promise.all(promises);
                 })).then(
                   function (files) {
-                    var promises = [];
+                    let promises = [];
 
                     // index.css
-                    var urlsMangler = postcss.plugin('postcss-urls-mangler', function () {
+                    let urlsMangler = postcss.plugin('postcss-urls-mangler', function () {
                       return function (css) {
                         const fs = require('fs-extra');
                         const path = require('path');
@@ -100,15 +100,15 @@ stromboli.getPlugins(config).then(
                         const md5 = require('nodejs-md5');
                         const outputFile = Promise.denodeify(fs.outputFile, 2);
 
-                        var promises = [];
+                        let promises = [];
 
                         css.walkDecls(function (decl) {
                           if (decl.value.indexOf('url') < 0) {
                             return;
                           }
 
-                          var parser = valueParser(decl.value);
-                          var parserPromises = [];
+                          let parser = valueParser(decl.value);
+                          let parserPromises = [];
 
                           parser.walk(function (node) {
                             if (node.type !== 'function') {
@@ -117,15 +117,15 @@ stromboli.getPlugins(config).then(
 
                             // @see https://www.npmjs.com/package/postcss-value-parser#function
                             node.nodes.forEach(function (argNode) {
-                              var value = argNode.value;
-                              var ext = path.extname(value);
+                              let value = argNode.value;
+                              let ext = path.extname(value);
 
-                              var promise = new Promise(function (fulfill, reject) {
+                              let promise = new Promise(function (fulfill, reject) {
                                 return fsReadFile(value).then(
                                   function (readData) {
                                     md5.file.quiet(value, function (err, md) {
-                                      var relPath = path.join('assets', md) + ext;
-                                      var absPath = path.join('.', distPath, relPath);
+                                      let relPath = path.join('assets', md) + ext;
+                                      let absPath = path.join('.', distPath, relPath);
 
                                       return outputFile(absPath, readData).then(
                                         function () {
@@ -137,7 +137,7 @@ stromboli.getPlugins(config).then(
                                     });
                                   },
                                   function (err) {
-                                    var md = md5.string.quiet(err, value);
+                                    let md = md5.string.quiet(err, value);
 
                                     argNode.value = path.join('assets', md) + ext;
 
@@ -161,7 +161,7 @@ stromboli.getPlugins(config).then(
                       };
                     });
 
-                    var cssNano = require('cssnano')({
+                    let cssNano = require('cssnano')({
                       discardDuplicates: true
                     });
 
@@ -183,19 +183,19 @@ stromboli.getPlugins(config).then(
                     );
 
                     // twig templates
-                    var templates = [];
+                    let templates = [];
 
                     promises.push(
                       new Promise(function (fulfill, reject) {
-                        var templatesPath = path.join(sourcePath, 'src');
+                        let templatesPath = path.join(sourcePath, 'src');
 
                         fs.walk(path.join(templatesPath))
                           .on('data', function (item) {
-                            var ext = path.extname(item.path);
+                            let ext = path.extname(item.path);
 
                             if (ext == '.twig') {
-                              var relativePath = path.relative(path.resolve(templatesPath), item.path);
-                              var destPath = path.join(targetPath, 'templates', relativePath);
+                              let relativePath = path.relative(path.resolve(templatesPath), item.path);
+                              let destPath = path.join(targetPath, 'templates', relativePath);
 
                               templates.push(destPath);
 
@@ -211,13 +211,13 @@ stromboli.getPlugins(config).then(
                     // README files
                     promises.push(
                       new Promise(function (fulfill, reject) {
-                        var sourcePath = path.join('src');
+                        let sourcePath = path.join('src');
 
                         fs.walk(path.join(sourcePath))
                           .on('data', function (item) {
                             if (path.basename(item.path) == 'README.md') {
-                              var relativePath = path.relative(path.resolve(sourcePath), item.path);
-                              var destPath = path.join(targetPath, 'templates', relativePath);
+                              let relativePath = path.relative(path.resolve(sourcePath), item.path);
+                              let destPath = path.join(targetPath, 'templates', relativePath);
 
                               fs.copySync(item.path, destPath);
                             }
