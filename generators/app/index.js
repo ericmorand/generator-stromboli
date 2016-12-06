@@ -43,6 +43,7 @@ module.exports = yeoman.Base.extend({
     this.fs.copy(this.templatePath('index.js'), this.destinationPath('index.js'));
     this.fs.copy(this.templatePath('editorconfig.txt'), this.destinationPath('.editorconfig'));
     this.fs.copy(this.templatePath('gitignore.txt'), this.destinationPath('.gitignore'));
+    this.fs.copy(this.templatePath('config/'), this.destinationPath('config/'));
     this.fs.copy(this.templatePath('lib/'), this.destinationPath('lib/'));
     this.fs.copy(this.templatePath('src/'), this.destinationPath('src/'));
   },
@@ -54,12 +55,6 @@ module.exports = yeoman.Base.extend({
       projectVersion: '0.1.0',
       projectAuthor: this.props.projectAuthor
     };
-
-    this.fs.copyTpl(
-      this.templatePath('config.js'),
-      this.destinationPath('config.js'),
-      data
-    );
 
     this.fs.copyTpl(
       this.templatePath('package.json'),
@@ -82,7 +77,7 @@ module.exports = yeoman.Base.extend({
   },
 
   last: function () {
-    this.config.set('demo', 'src/demo');
+    this.config.set('demo', 'src/components/demo');
     this.config.save();
 
     this.log(yosay(

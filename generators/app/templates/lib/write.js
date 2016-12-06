@@ -7,7 +7,7 @@ const Promise = require('promise');
 const fsCopy = Promise.denodeify(fs.copy, 2);
 const fsOutputFile = Promise.denodeify(fs.outputFile, 3);
 
-let exports = function (renderResult, output) {
+let writeRenderResult = function (renderResult, output) {
   let promises = [];
 
   let result = {
@@ -30,7 +30,7 @@ let exports = function (renderResult, output) {
       }
     ));
 
-     // console.log('WILL COPY DEPENDENCY FROM', from, 'TO', to);
+    // console.log('WILL COPY DEPENDENCY FROM', from, 'TO', to);
   });
 
   renderResult.getBinaries().forEach(function (binary) {
@@ -58,4 +58,19 @@ let exports = function (renderResult, output) {
   );
 };
 
-module.exports = exports;
+let writeComponents = function (components, output) {
+  return Promise.all(components.map(function (component) {
+    let promises = [];
+
+    component.renderResults.forEach(function (renderResult, pluginName) {
+      promises.push(writeRenderResult(renderResult, path.join(output, component.name)));
+    });
+
+    return Promise.all(promises);
+  }))
+};
+
+module.exports = {
+  writeRenderResult: writeRenderResult,
+  writeComponents: writeComponents
+};

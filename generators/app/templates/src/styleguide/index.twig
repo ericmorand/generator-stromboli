@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>rtl-sass demo</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+<div id="app">
+    <styleguide inline-template>
+        <div class="styleguide" v-bind:class="{'menu-expanded': menuExpanded}">
+            <div class="app-bar">
+                <button v-on:click="onBurgerClick" class="burger"></button>
+            </div>
+            <div class="menu-wrapper">
+                <styleguide-menu v-bind:items="{{ components|json_encode|escape }}"></styleguide-menu>
+            </div>
+            <styleguide-content v-bind:source="source"></styleguide-content>
+        </div>
+    </styleguide>
+</div>
+<script src="index.js"></script>
+</body>
+</html>

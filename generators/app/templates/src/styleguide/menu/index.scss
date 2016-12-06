@@ -1,0 +1,24 @@
+.menu {
+  ul {
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    list-style: none;
+    cursor: pointer;
+
+    padding: 8px;
+    border-width: 1px;
+    border-bottom-style: solid;
+    border-top-style: solid;
+    border-color: transparent;
+    font-weight: 700;
+
+    &.active {
+      background-color: #B24109;
+      border-color: #7F1813;
+      color: white;
+    }
+  }
+}

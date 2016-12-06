@@ -1,0 +1,5 @@
+<div class="menu">
+    <ul>
+        <li v-for="item in items" v-on:click="onItemClick(item)" v-bind:class="{'active': selectedItem && (selectedItem.name == item.name)}">{{ item.name }}</li>
+    </ul>
+</div>

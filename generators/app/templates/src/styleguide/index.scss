@@ -1,0 +1,119 @@
+@import "font";
+@import "menu/index";
+@import "../../node_modules/breakpoint-sass/stylesheets/breakpoint";
+
+$appBarHeight: 48px;
+
+@font-face {
+  font-family: "Icon";
+  src: url("../../node_modules/material-design-icons/iconfont/MaterialIcons-Regular.ttf");
+}
+
+html, body, #app {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: "Primary", sans-serif;
+  color: #333;
+}
+
+.styleguide {
+  height: 100%;
+  position: relative;
+
+  .menu, .content {
+    float: left;
+    height: 100%;
+    box-sizing: border-box;
+  }
+
+  .app-bar {
+    position: fixed;
+    border-bottom: solid 1px #ccc;
+    height: $appBarHeight;
+    box-sizing: border-box;
+    width: 100%;
+    background-color: white;
+
+    @include breakpoint(min-width 769px) {
+      display: none;
+    }
+  }
+
+  .burger {
+    font-family: "Icon", serif;
+    display: block;
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    cursor: pointer;
+    border: 0;
+    background: none;
+    padding: 0;
+
+    &:before {
+      content: "menu";
+    }
+  }
+
+  .menu-wrapper {
+    background-color: #efefef;
+    box-sizing: border-box;
+    position: relative;
+    transition: all 0.2s linear;
+    overflow: auto;
+
+    @include breakpoint(max-width 768px) {
+      position: absolute;
+      top: $appBarHeight;
+      bottom: 0;
+      left: -100%;
+      width: 100%;
+      z-index: 1;
+    }
+
+    @include breakpoint(min-width 769px) {
+      width: 20%;
+      height: 100%;
+      float: left;
+    }
+
+    .menu {
+      width: 100%;
+    }
+  }
+
+  &.menu-expanded {
+    overflow: hidden;
+
+    .menu-wrapper {
+      position: absolute;
+
+      @include breakpoint(max-width 768px) {
+        display: block;
+        left: 0;
+        right: 0;
+      }
+    }
+  }
+
+  .content {
+    width: 100%;
+    margin-top: $appBarHeight;
+
+    @include breakpoint(min-width 769px) {
+      width: 80%;
+      margin-top: 0;
+    }
+
+    iframe {
+      border: none;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  }
+}

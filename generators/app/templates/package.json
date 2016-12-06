@@ -6,9 +6,16 @@
   "dependencies": {},
   "devDependencies": {
     "aliasify": "^2.1.0",
+    "breakpoint-sass": "^2.7.0",
     "browser-sync": "^2.16.0",
     "chokidar": "^1.6.0",
+    "cssnano": "^3.8.1",
+    "material-design-icons": "^3.0.1",
     "merge": "^1.2.0",
+    "minifyify": "^7.3.4",
+    "postcss": "^5.2.6",
+    "postcss-copy": "^6.1.0",
+    "sha.js": "^2.4.8",
     "stringify": "^5.1.0",
     "stromboli": "^0.7.1",
     "stromboli-plugin-twig": "^0.6.2",
@@ -17,6 +24,7 @@
     "vue": "^2.0.8"
   },
   "scripts": {
+    "build": "node build.js",
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   }
