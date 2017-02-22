@@ -34,7 +34,7 @@ class Builder extends ComponentsBuilder {
             browserSyncConfig.server = browserSyncConfig.server + '/' + component.name;
 
             browserSync.init(browserSyncConfig, function (err, bs) {
-              component.bs = bs;
+              component.bs = browserSync;
               component.url = bs.options.get('urls').get('local') + '/demo/index';
 
               index++;
