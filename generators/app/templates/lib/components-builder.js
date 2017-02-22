@@ -12,11 +12,11 @@ class Builder extends Stromboli {
     super();
 
     this.componentsWatchers = new Map();
-    this.browserSync = null;
     this.config = null;
   };
 
   pluginPreRenderComponent(plugin, component) {
+
     let that = this;
 
     let promises = [];
@@ -28,7 +28,7 @@ class Builder extends Stromboli {
       let componentWatchers = that.componentsWatchers.get(component.name);
 
       if (componentWatchers.has(plugin.name)) {
-        console.log('WATCHER FOR COMPONENT', component.name, 'AND PLUGIN', plugin.name, 'WILL BE CLOSED');
+        that.info('WATCHER FOR COMPONENT', component.name, 'AND PLUGIN', plugin.name, 'WILL BE CLOSED');
 
         watcher = componentWatchers.get(plugin.name);
 
@@ -50,7 +50,7 @@ class Builder extends Stromboli {
             // write plugin render result browser-sync server directory
             let renderResult = component.renderResults.get(plugin.name);
 
-            return write.writeRenderResult(renderResult, that.getRenderResultWritePath(component)).then(
+            return write.writeRenderResult(renderResult, that.getRenderResultWritePath(component, plugin)).then(
               function (files) {
                 // watch dependencies
                 let watcher = null;
@@ -62,7 +62,7 @@ class Builder extends Stromboli {
 
                 let componentWatchers = that.componentsWatchers.get(component.name);
 
-                // console.log('WATCHER WILL WATCH', dependencies, 'USING PLUGIN', plugin.name);
+                that.info('WATCHER WILL WATCH', dependencies, 'USING PLUGIN', plugin.name);
 
                 watcher = that.getWatcher(dependencies, function () {
                   that.pluginRenderComponent(plugin, component)
@@ -71,19 +71,22 @@ class Builder extends Stromboli {
                 componentWatchers.set(plugin.name, watcher);
 
                 // reload Browsersync
-                if (that.browserSync) {
+                if (component.bs) {
                   files.binaries.forEach(function (binary) {
                     if (path.extname(binary) != '.map') {
-                      that.browserSync.reload(binary);
+                      component.bs.reload(binary);
                     }
                   });
                 }
 
                 return component;
+              },
+              function (err) {
+                console.log(err);
               }
             )
           },
-          function(err) {
+          function (err) {
             console.log(err);
           }
         )
@@ -91,8 +94,8 @@ class Builder extends Stromboli {
     );
   };
 
-  getRenderResultWritePath(component) {
-    return path.join(this.config.browserSync.server, component.name);
+  getRenderResultWritePath(component, plugin) {
+    return path.join(this.config.browserSync.server, component.name, plugin.name);
   };
 
   /**

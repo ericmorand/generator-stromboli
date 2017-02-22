@@ -77,9 +77,6 @@ module.exports = yeoman.Base.extend({
   },
 
   last: function () {
-    this.config.set('demo', 'src/components/demo');
-    this.config.save();
-
     this.log(yosay(
       'Done! Launch ' + chalk.red('npm start') + ' and code!'
     ));

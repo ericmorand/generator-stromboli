@@ -1,11 +1,11 @@
 'use strict';
-var path = require('path');
-var assert = require('yeoman-assert');
-var helpers = require('yeoman-test');
-var fs = require('fs-extra');
+let path = require('path');
+let assert = require('yeoman-assert');
+let helpers = require('yeoman-test');
+let fs = require('fs-extra');
 
 describe('generator-stromboli:component', function () {
-  var files = [
+  let files = [
     'component.json',
     'demo.data.js',
     'demo.js',
@@ -16,7 +16,7 @@ describe('generator-stromboli:component', function () {
     'index.twig'
   ];
 
-  var prompts = {
+  let prompts = {
     componentName: 'lorem/ipsum',
     componentDescription: 'Lorem ipsum dolor sit amet',
     componentAuthor: 'Lorem IPSUM'
@@ -25,15 +25,11 @@ describe('generator-stromboli:component', function () {
   it('creates files', function () {
     return helpers.run(path.join(__dirname, '../generators/component'))
       .inTmpDir(function (dir) {
-        var componentDir = path.join(dir, 'lorem');
+        let componentDir = path.join(dir, 'lorem');
 
         fs.mkdirpSync(componentDir);
 
         this.cd(componentDir);
-
-        this.localConfig = {
-          demo: path.join(dir, 'demo')
-        };
       })
       .withPrompts(prompts)
       .toPromise()
@@ -41,35 +37,9 @@ describe('generator-stromboli:component', function () {
         assert.file(files);
 
         files.forEach(function (file) {
-          let expected = fs.readFileSync(path.resolve(path.join(__dirname, 'component/root/expected/', file)), 'utf8');
+          let wanted = fs.readFileSync(path.resolve(path.join(__dirname, 'component/wanted/', file)), 'utf8');
 
-          assert.fileContent(file, expected.toString());
-        });
-      });
-  });
-
-  it('creates files in subdirectory', function () {
-    return helpers.run(path.join(__dirname, '../generators/component'))
-      .inTmpDir(function (dir) {
-        var componentDir = path.join(dir, 'lorem/ipsum');
-
-        fs.mkdirpSync(componentDir);
-
-        this.cd(componentDir);
-
-        this.localConfig = {
-          demo: path.join(dir, 'demo')
-        };
-      })
-      .withPrompts(prompts)
-      .toPromise()
-      .then(function (dir) {
-        assert.file(files);
-
-        files.forEach(function (file) {
-          let expected = fs.readFileSync(path.resolve(path.join(__dirname, 'component/subdirectory/expected/', file)), 'utf8');
-
-          assert.fileContent(file, expected.toString());
+          assert.fileContent(file, wanted.toString());
         });
       });
   });

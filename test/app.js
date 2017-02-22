@@ -1,7 +1,7 @@
 'use strict';
-var path = require('path');
-var assert = require('yeoman-assert');
-var helpers = require('yeoman-test');
+let path = require('path');
+let assert = require('yeoman-assert');
+let helpers = require('yeoman-test');
 
 describe('generator-stromboli:app', function () {
   before(function () {
@@ -13,19 +13,22 @@ describe('generator-stromboli:app', function () {
   it('creates files', function () {
     assert.file([
       'build.js',
-      'config.js',
+      'config/plugin/javascript.js',
+      'config/plugin/sass.js',
+      'config/plugin/twig.js',
+      'config/build.js',
+      'config/components.js',
+      'config/styleguide.js',
+      'lib/components-builder.js',
+      'lib/styleguide-builder.js',
+      'lib/write.js',
+      'src/styleguide',
       '.editorconfig',
       '.gitignore',
+      'build.js',
       'index.js',
       'package.json',
-      'README.md',
-      '.yo-rc.json'
+      'README.md'
     ]);
-
-    assert.jsonFileContent('.yo-rc.json', {
-      'generator-stromboli': {
-        demo: path.join(process.cwd(), 'src/demo')
-      }
-    });
   });
 });

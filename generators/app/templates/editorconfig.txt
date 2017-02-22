@@ -13,11 +13,11 @@ indent_style = space
 [*.html]
 indent_size = 4
 
-# Indentation override for all JS under lib directory
+# Indentation override for all JS
 [*.js]
 indent_size = 2
 
-# Matches the exact files either package.json or .travis.yml
+# Indentation override for all JSON
 [*.json]
 indent_style = space
 indent_size = 2

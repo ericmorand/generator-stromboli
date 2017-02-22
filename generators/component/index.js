@@ -32,13 +32,6 @@ module.exports = yeoman.Base.extend({
         name: 'componentAuthor',
         message: 'Author of the component',
         store: true
-      },
-      {
-        type: 'input',
-        name: 'demoComponentRoot',
-        message: 'Directory where the demo component is located',
-        store: true,
-        default: 'src/demo'
       }
     ];
 
@@ -49,17 +42,12 @@ module.exports = yeoman.Base.extend({
   },
 
   writing: function () {
-    var demoComponentRoot = path.join(this.env.cwd, this.config.get('demo'));
-
-    this.destinationRoot(this.contextRoot);
-
     var data = {
       componentName: this.props.componentName,
       componentDescription: this.props.componentDescription,
       componentVersion: '0.1.0',
       componentAuthors: this.props.componentAuthor,
-      componentCleanName: getSlug(this.props.componentName),
-      demoComponentRootRelativePath: path.relative(this.contextRoot, demoComponentRoot)
+      componentCleanName: getSlug(this.props.componentName)
     };
 
     this.fs.copyTpl(
