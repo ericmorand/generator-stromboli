@@ -1,8 +1,9 @@
+const merge = require('merge');
 const Promise = require('promise');
 const TwigPlugin = require('stromboli-plugin-twig');
 
 class MyTwigPlugin extends TwigPlugin {
-  getTemplateData(file) {
+  getData(template) {
     let result = {
       files: [],
       data: this.config.data
@@ -16,7 +17,7 @@ module.exports = {
   componentRoot: 'src/styleguide',
   componentManifest: 'component.json',
   plugins: {
-    javascript: {
+    js: {
       module: require('stromboli-plugin-javascript'),
       entry: 'index.js',
       config: {
@@ -34,12 +35,12 @@ module.exports = {
         ]
       }
     },
-    twig: {
+    index: {
       module: MyTwigPlugin,
       entry: 'index.twig',
       config: {}
     },
-    sass: {
+    css: {
       module: require('stromboli-plugin-sass'),
       entry: 'index.scss',
       config: {
@@ -58,6 +59,9 @@ module.exports = {
     open: false,
     notify: false,
     server: 'www/styleguide',
-    logPrefix: 'Styleguide'
+    logPrefix: 'Styleguide',
+    ui: {
+      port: 3001
+    }
   }
 };

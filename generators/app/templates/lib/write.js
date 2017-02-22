@@ -20,12 +20,12 @@ let writeRenderResult = function (renderResult, output) {
     let to = path.join(output, path.relative(path.resolve('.'), dependency));
 
     promises.push(fsCopy(from, to).then(
-      function() {
+      function () {
         result.dependencies.push(to);
 
         return to;
       },
-      function(err) {
+      function (err) {
         console.log(err);
       }
     ));
@@ -38,21 +38,19 @@ let writeRenderResult = function (renderResult, output) {
     let to = path.join(output, binary.name);
 
     promises.push(fsOutputFile(to, data).then(
-      function() {
+      function () {
         result.binaries.push(to);
 
         return to;
       },
-      function(err) {
+      function (err) {
         console.log(err);
       }
     ));
-
-    //console.log('WILL WRITE BINARY FROM', data, 'TO', to);
   });
 
   return Promise.all(promises).then(
-    function() {
+    function () {
       return result;
     }
   );

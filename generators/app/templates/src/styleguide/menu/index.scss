@@ -8,7 +8,6 @@
     list-style: none;
     cursor: pointer;
 
-    padding: 8px;
     border-width: 1px;
     border-bottom-style: solid;
     border-top-style: solid;
@@ -18,7 +17,27 @@
     &.active {
       background-color: #B24109;
       border-color: #7F1813;
-      color: white;
+
+      a {
+        &, &:active, &:visited {
+          color: white;
+        }
+      }
+    }
+
+    .name {
+      font-size: 1.25em;
+      line-height: 1.25em;
+    }
+
+    a {
+      display: block;
+      padding: 8px;
+      text-decoration: none;
+
+      &, &:active, &:visited {
+        color: #333;
+      }
     }
   }
 }
