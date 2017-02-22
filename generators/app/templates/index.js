@@ -6,7 +6,7 @@ const merge = require('merge');
 const ComponentsBuilder = require('./lib/components-builder');
 const StyleguideBuilder = require('./lib/styleguide-builder');
 
-let componentsBuilderConfig = merge.recursive({}, require('./config/common'), require('./config/components'));
+let componentsBuilderConfig = require('./config/components');
 
 class Builder extends ComponentsBuilder {
   start(config) {
@@ -25,26 +25,52 @@ class Builder extends ComponentsBuilder {
     return super.start(config).then(
       function (components) {
         // browser-sync
-        let browserSync = require('browser-sync').create();
+        return new Promise(function (fulfill, reject) {
+          let processComponentAtIndex = function (index) {
+            let component = components[index];
+            let browserSync = require('browser-sync').create(component.name);
+            let browserSyncConfig = merge({}, that.config.browserSync);
 
-        browserSync.init(config.browserSync, function () {
-            that.browserSync = browserSync;
+            browserSyncConfig.server = browserSyncConfig.server + '/' + component.name;
+
+            browserSync.init(browserSyncConfig, function (err, bs) {
+              component.bs = bs;
+              component.url = bs.options.get('urls').get('local') + '/demo/index';
+
+              index++;
+
+              if (index < components.length) {
+                processComponentAtIndex(index);
+              }
+              else {
+                fulfill(components);
+              }
+            });
+          };
+
+          processComponentAtIndex(0);
+        }).then(
+          function (components) {
+            // styleguide build
+            let styleguideBuilder = new StyleguideBuilder();
+            let styleguideBuilderConfig = require('./config/styleguide');
+            let componentsData = components.map(function (component) {
+              return {
+                name: component.name,
+                url: component.url
+              }
+            });
+
+            styleguideBuilderConfig.plugins.index.config.data = {
+              components: componentsData
+            };
+
+            return styleguideBuilder.start(styleguideBuilderConfig);
           }
         );
-
-        components.forEach(function(component) {
-          component.url = '//localhost:' + browserSync.instance.getOptions().get('port') + '/' + component.name
-        });
-
-        // styleguide build
-        let styleguideBuilder = new StyleguideBuilder();
-        let styleguideBuilderConfig = require('./config/styleguide');
-
-        styleguideBuilderConfig.plugins.twig.config.data = {
-          components: components,
-        };
-
-        return styleguideBuilder.start(styleguideBuilderConfig);
+      },
+      function (err) {
+        console.log(err);
       }
     );
   };
