@@ -35,7 +35,8 @@ class Builder extends ComponentsBuilder {
 
             browserSync.init(browserSyncConfig, function (err, bs) {
               component.bs = browserSync;
-              component.url = bs.options.get('urls').get('local') + '/demo/index';
+              component.url = '/demo/index';
+              component.port = bs.options.get('port');
 
               index++;
 
@@ -57,7 +58,8 @@ class Builder extends ComponentsBuilder {
             let componentsData = components.map(function (component) {
               return {
                 name: component.name,
-                url: component.url
+                url: component.url,
+                port: component.port
               }
             });
 

@@ -5,12 +5,22 @@ Vue.component('styleguide-menu', {
   props: {
     items: null
   },
-  data: function() {
+  data: function () {
     return {
       selectedItem: null
     }
   },
-  created: function() {
+  created: function () {
+    this.refreshItems = function() {
+      this.items.forEach(function(item) {
+        item.getUrl = function() {
+          return '//' + window.location.hostname + ':' + this.port + '/' + this.url;
+        };
+      });
+    };
+
+    this.refreshItems();
+
     if (this.selectedItem == null) {
       this.selectedItem = this.items[0];
     }
@@ -21,6 +31,9 @@ Vue.component('styleguide-menu', {
     }
   },
   watch: {
+    items: function(val) {
+      this.refreshItems();
+    },
     selectedItem: function (val) {
       this.$parent.$emit('styleguide-menu:selectedItemDidChange', val);
     }

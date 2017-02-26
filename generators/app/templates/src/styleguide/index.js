@@ -14,7 +14,7 @@ new Vue({
       },
       created: function () {
         this.$on('styleguide-menu:selectedItemDidChange', function (item) {
-          this.source = item.url;
+          this.source = item.getUrl();
           this.menuExpanded = false;
         });
       },

@@ -2,7 +2,7 @@
   <ul>
     <li v-for="item in items" v-on:click="onItemClick(item)"
         v-bind:class="{'active': selectedItem && (selectedItem.name == item.name)}">
-      <a :href="item.url" v-on:click.prevent="onItemClick(item)">
+      <a :href="item.getUrl()" v-on:click.prevent="onItemClick(item)">
         <span class="name">{{ item.name }}</span>
       </a>
     </li>
