@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>lorem/ipsum demo</title>
+  <title>{{ demo.title }}</title>
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
-<div class="demo-lorem-ipsum">
+<div class="{{ demo.class }}">
   {% include './index.twig' %}
 </div>
 <script src="index.js"></script>
