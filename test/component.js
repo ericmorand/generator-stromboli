@@ -17,7 +17,7 @@ describe('generator-stromboli:component', function () {
   ];
 
   let prompts = {
-    componentName: 'lorem/ipsum',
+    componentName: 'lorem-ipsum/dolor',
     componentDescription: 'Lorem ipsum dolor sit amet',
     componentAuthor: 'Lorem IPSUM'
   };

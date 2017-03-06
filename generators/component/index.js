@@ -47,7 +47,7 @@ module.exports = yeoman.Base.extend({
       componentDescription: this.props.componentDescription,
       componentVersion: '0.1.0',
       componentAuthors: this.props.componentAuthor,
-      componentCleanName: getSlug(this.props.componentName)
+      componentCleanName: getSlug(this.props.componentName, '--')
     };
 
     this.fs.copyTpl(
