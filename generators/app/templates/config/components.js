@@ -2,7 +2,7 @@ const merge = require('merge');
 
 module.exports = {
   componentRoot: 'src/components',
-  componentManifest: 'component.json',
+  componentManifest: 'demo.json',
   plugins: {
     'demo/css': {
       module: require('stromboli-plugin-sass'),
@@ -11,16 +11,16 @@ module.exports = {
         sourceComments: true,
         sourceMapEmbed: true
       }),
-      entry: 'demo.scss'
+      entry: 'index.scss'
     },
     'demo/index': {
       module: require('stromboli-plugin-twig'),
-      entry: 'demo.twig',
+      entry: 'index.twig',
       config: merge.recursive({}, require('./plugin/twig'))
     },
     'demo/js': {
       module: require('stromboli-plugin-javascript'),
-      entry: 'demo.js',
+      entry: 'index.js',
       config: merge.recursive({}, require('./plugin/javascript'), {
         debug: true
       })

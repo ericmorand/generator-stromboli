@@ -57,8 +57,14 @@ module.exports = yeoman.Base.extend({
     );
 
     this.fs.copyTpl(
-      this.templatePath('demo.data.js'),
-      this.destinationPath('demo.data.js'),
+      this.templatePath('demo/demo.json'),
+      this.destinationPath('demo/demo.json'),
+      data
+    );
+
+    this.fs.copyTpl(
+      this.templatePath('demo/index.data.js'),
+      this.destinationPath('demo/index.data.js'),
       data
     );
 
@@ -66,8 +72,8 @@ module.exports = yeoman.Base.extend({
 
     ['twig', 'js', 'scss'].forEach(function (ext) {
       that.fs.copyTpl(
-        that.templatePath('demo.' + ext),
-        that.destinationPath('demo.' + ext),
+        that.templatePath('demo/index.' + ext),
+        that.destinationPath('demo/index.' + ext),
         data
       );
     });
