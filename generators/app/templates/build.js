@@ -16,8 +16,8 @@ const fsMkdirs = Promise.denodeify(fs.mkdirs, 1);
 
 const Stromboli = require('stromboli');
 
-let componentsBuilderRoot = 'src/components';
 let componentsBuilderConfig = require('./config/build');
+let componentsBuilderRoot = componentsBuilderConfig.componentRoot;
 
 let write = require('./lib/write');
 let tmpPath = 'tmp';
@@ -101,7 +101,7 @@ fsEmptyDir(componentsBuilderConfig.paths.dist).then(
                         function (css) {
                           return postcss(config.postcss.plugins).process(css.toString(), {from: stylesheet}).then(
                             function (result) {
-                              return fsOutputFile(path.join(path.dirname(stylesheet), 'index.css'), result.css);
+                              return fsOutputFile(path.join(path.dirname(stylesheet), path.basename(stylesheet)), result.css);
                             }
                           );
                         }
@@ -109,7 +109,7 @@ fsEmptyDir(componentsBuilderConfig.paths.dist).then(
                     };
 
                     let finalizeStylesheet = function (stylesheet) {
-                      let to = path.join(componentsBuilderConfig.paths.dist, 'css', 'index.css');
+                      let to = path.join(componentsBuilderConfig.paths.dist, 'css', path.basename(stylesheet));
 
                       return fsMkdirs(path.dirname(to)).then(
                         function () {
@@ -123,7 +123,7 @@ fsEmptyDir(componentsBuilderConfig.paths.dist).then(
                     };
 
                     let finalizeScript = function (script) {
-                      let to = path.join(componentsBuilderConfig.paths.dist, 'js', 'index.js');
+                      let to = path.join(componentsBuilderConfig.paths.dist, 'js', path.basename(script));
 
                       return fsCopy(script, to);
                     };
@@ -147,10 +147,9 @@ fsEmptyDir(componentsBuilderConfig.paths.dist).then(
                     // html
                     components.forEach(function (component) {
                       let renderResult = component.renderResults.get('html');
-                      let index = 0;
 
-                      renderResult.getDependencies().forEach(function (dependency) {
-                        if (index > 0) {
+                      renderResult.dependencies.forEach(function (dependency) {
+                        if (path.basename(dependency) != 'index.twig') {
                           let relativeDependencyPath = path.relative(componentsBuilderRoot, dependency);
                           let to = path.join(componentsBuilderConfig.paths.dist, 'templates', relativeDependencyPath);
 
@@ -160,15 +159,8 @@ fsEmptyDir(componentsBuilderConfig.paths.dist).then(
                             }
                           ));
                         }
-
-                        index++;
                       });
                     });
-
-                    // manifestos
-                    promises.push(fsCopy(path.resolve('src/manifestos/'), componentsBuilderConfig.paths.dist));
-
-                    // ...
 
                     // clean
                     return Promise.all(promises).then(

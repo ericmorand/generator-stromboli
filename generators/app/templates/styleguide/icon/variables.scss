@@ -1,0 +1,45 @@
+@function code-points-to-map($list) {
+  $result: ();
+  $index: 0;
+  $codePoint: null;
+
+  @each $listItem in $list {
+    @if ($index == 0) {
+      $codePoint: $listItem;
+      $index: $index + 1;
+    } @else {
+      $result: map_merge($result, (#{$codePoint}: $listItem));
+
+      $index: 0;
+    }
+  }
+
+  @return $result;
+}
+
+$theme--icon--icons: (
+        chromebook: e31f,
+        computer: e30a,
+        desktop: e30c,
+        extension: e87b,
+        filter: e3d3,
+        filter-list: e152,
+        folder: e2c7,
+        fullscreen: e5d0,
+        insert-drive-file: e24d,
+        laptop: e31e,
+        menu: e5d2,
+        navigate-before: e408,
+        navigate-next: e409,
+        open-in-own: e89e,
+        play-arrow: e037,
+        polymer: e8ab,
+        search: e8b6,
+        share: e80d,
+        smartphone: e32c,
+        tablet-portrait: e330,
+        tablet-landscape: e32f,
+        tv: e333,
+        watch: e334,
+        whatshot: e80e
+);

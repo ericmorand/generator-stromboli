@@ -6,7 +6,7 @@ const merge = require('merge');
 const ComponentsBuilder = require('./lib/components-builder');
 const StyleguideBuilder = require('./lib/styleguide-builder');
 
-let componentsBuilderConfig = require('./config/components');
+let testBuilderConfig = require('./config/test');
 
 class Builder extends ComponentsBuilder {
   start(config) {
@@ -35,7 +35,7 @@ class Builder extends ComponentsBuilder {
 
             browserSync.init(browserSyncConfig, function (err, bs) {
               component.bs = browserSync;
-              component.url = '/demo/index';
+              component.url = '/html';
               component.port = bs.options.get('port');
 
               index++;
@@ -64,6 +64,7 @@ class Builder extends ComponentsBuilder {
             });
 
             styleguideBuilderConfig.plugins.index.config.data = {
+              title: pkg.description,
               components: componentsData
             };
 
@@ -80,4 +81,4 @@ class Builder extends ComponentsBuilder {
 
 let stromboli = new Builder();
 
-stromboli.start(componentsBuilderConfig);
+stromboli.start(testBuilderConfig);

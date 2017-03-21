@@ -1,0 +1,10 @@
+<ul class="outline-view">
+    <li class="outline-view-item {getClassForItem(item)}" each="{item in model.getItems()}" click="{onItemClick(item)}">
+        <div class="indentation" each="{getIndentationForItem(item)}"></div>
+        <div class="expander" if="{model.isItemExpandable(item)}" click="{onExpanderClick(item)}"></div>
+        <div class="icon"></div>
+        <div class="title">
+            <a href="{item.url}">{item.name}</a>
+        </div>
+    </li>
+</ul>

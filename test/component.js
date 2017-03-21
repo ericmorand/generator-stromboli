@@ -6,15 +6,20 @@ let fs = require('fs-extra');
 
 describe('generator-stromboli:component', function () {
   let files = [
-    'demo/demo.json',
-    'demo/index.data.js',
-    'demo/index.js',
-    'demo/index.scss',
-    'demo/index.twig',
-    'component.json',
-    'index.js',
-    'index.scss',
-    'index.twig'
+    'test/default/index.js',
+    'test/default/index.scss',
+    'test/default/index.twig',
+    'test/default/index.twig.data.js',
+    'test/default/test.json',
+    'test/edge-case/index.js',
+    'test/edge-case/index.scss',
+    'test/edge-case/index.twig',
+    'test/edge-case/index.twig.data.js',
+    'test/edge-case/test.json',
+    'src/component.json',
+    'src/index.js',
+    'src/index.scss',
+    'src/index.twig'
   ];
 
   let prompts = {

@@ -14,13 +14,13 @@
     "minifyify": "^7.3.4",
     "postcss": "^5.2.6",
     "postcss-copy": "^6.1.0",
+    "riot": "^3.3.2",
     "sha.js": "^2.4.8",
     "stringify": "^5.1.0",
     "stromboli": "^0.9.0",
     "stromboli-plugin-javascript": "^0.5.0",
     "stromboli-plugin-sass": "^0.9.0",
-    "stromboli-plugin-twig": "^0.11.0",
-    "vue": "^2.0.8"
+    "stromboli-plugin-twig": "^0.11.0"
   },
   "scripts": {
     "build": "node build.js",

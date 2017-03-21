@@ -14,7 +14,7 @@ class MyTwigPlugin extends TwigPlugin {
 }
 
 module.exports = {
-  componentRoot: 'src/styleguide',
+  componentRoot: 'styleguide',
   componentManifest: 'component.json',
   plugins: {
     js: {
@@ -25,11 +25,6 @@ module.exports = {
           ['stringify', {
             appliesTo: {
               includeExtensions: ['html']
-            }
-          }],
-          ['aliasify', {
-            aliases: {
-              'vue': 'vue/dist/vue'
             }
           }]
         ]

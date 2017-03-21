@@ -5,8 +5,5 @@ module.exports = {
         includeExtensions: ['html']
       }
     }]
-  ],
-  plugin: [
-    ['tsify']
   ]
 };

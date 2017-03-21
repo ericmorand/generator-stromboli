@@ -1,0 +1,21 @@
+@import "index";
+@import "../demo/index";
+
+.demo-theme-icon {
+  .icon-wrapper {
+    display: inline-block;
+    //@include margin-left(1.5em);
+    //@include margin-right(1.5em);
+    text-align: center;
+    width: 5em;
+  }
+
+  .icon {
+    font-size: 2.0em;
+  }
+
+  .caption {
+    display: block;
+    font-size: 0.75em;
+  }
+}

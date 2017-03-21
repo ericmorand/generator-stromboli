@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ demo.title }}</title>
+  <link rel="stylesheet" href="../css/index.css">
+</head>
+<body class="{{ demo.class }}">
+<div>
+  {% for fixture in fixtures %}
+    <div class="{{ demo.class }}--fixture">
+      <h1>{{ fixture.title }}</h1>
+      <div>
+        {% include '../../src/index.twig' with {
+        content: fixture.content
+        } %}
+      </div>
+    </div>
+  {% endfor %}
+</div>
+<script src="../js/index.js"></script>
+</body>
+</html>

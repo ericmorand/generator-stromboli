@@ -1,0 +1,125 @@
+@import "../../node_modules/rtl-sass/src/rtl";
+@import "../icon/index";
+
+.outline-view {
+  //background-color: $theme--color--background-color--light;
+  //color: $theme--color--text-color--on-dark;
+
+  padding: 0;
+  margin: 0;
+  display: inline-block;
+  min-width: 100%;
+  @include rtl-sass-padding(0);
+  @include rtl-sass-margin(0);
+
+  font-size: 1.00em;
+
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
+  .items {
+    display: inline-block;
+    width: 100%;
+  }
+
+  .outline-view-item {
+    display: block;
+    list-style: none;
+    white-space: nowrap;
+    cursor: default;
+    height: 2.0em;
+    font-family: NoSpace, sans-serif;
+
+    border-width: 1px;
+    border-bottom-style: solid;
+    border-top-style: solid;
+    border-color: transparent;
+
+    &.active {
+      background-color: #B24109;
+      border-color: #7F1813;
+      color: white;
+
+      a {
+        &, &:active, &:visited {
+          color: white;
+        }
+      }
+    }
+
+    .name {
+      font-size: 1.0em;
+      line-height: 1.0em;
+    }
+
+    a {
+      display: block;
+      text-decoration: none;
+
+      &, &:active, &:visited {
+        color: #333;
+      }
+    }
+
+    &.selected {
+      //background-color: $theme--color--highlight;
+    }
+
+    &.hidden {
+      display: none;
+    }
+
+    .indentation, .expander, .icon, .title {
+      font-family: NoSpace, sans-serif;
+      display: inline-block;
+      vertical-align: middle;
+      height: 100%;
+      line-height: 2.0em;
+      @include rtl-sass-padding-left(0.25em);
+    }
+
+    .indentation {
+      width: 1.0em;
+
+      &.leaf-indentation {
+        display: none;
+      }
+    }
+
+    .expander {
+      width: 1.0em;
+      @include icon(play-arrow);
+
+      &:before {
+        @include rtl-sass-declaration(transform, rotate(0deg), rotate(180deg));
+        display: block;
+      }
+    }
+
+    .icon {
+      width: 1.0em;
+      @include icon(folder);
+    }
+
+    &.component {
+      .icon {
+        @include icon(polymer);
+      }
+    }
+
+    .title {
+      @include rtl-sass-padding-right(1.0em);
+    }
+
+    &.expanded {
+      .expander {
+        &:before {
+          @include rtl-sass-declaration(transform, rotate(90deg), rotate(90deg));
+        }
+      }
+    }
+  }
+}

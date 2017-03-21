@@ -1,0 +1,19 @@
+@import "lib/mixins";
+@import "variables";
+
+@font-face {
+  font-family: 'Icon';
+  src: url("../../node_modules/material-design-icons/iconfont/MaterialIcons-Regular.eot"); /* For IE6-8 */
+  src: url("../../node_modules/material-design-icons/iconfont/MaterialIcons-Regular.woff2") format('woff2'),
+  url("../../node_modules/material-design-icons/iconfont/MaterialIcons-Regular.woff") format('woff'),
+  url("../../node_modules/material-design-icons/iconfont/MaterialIcons-Regular.ttf") format('truetype');
+  font-style: normal;
+}
+
+@each $name, $value in $theme--icon--icons {
+  .icon {
+    &.#{$name} {
+      @include icon($name);
+    }
+  }
+}

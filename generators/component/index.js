@@ -50,40 +50,45 @@ module.exports = yeoman.Base.extend({
       componentCleanName: getSlug(this.props.componentName, '--')
     };
 
-    this.fs.copyTpl(
-      this.templatePath('component.json'),
-      this.destinationPath('component.json'),
-      data
-    );
-
-    this.fs.copyTpl(
-      this.templatePath('demo/demo.json'),
-      this.destinationPath('demo/demo.json'),
-      data
-    );
-
-    this.fs.copyTpl(
-      this.templatePath('demo/index.data.js'),
-      this.destinationPath('demo/index.data.js'),
-      data
-    );
-
     var that = this;
+    var extensions = ['twig', 'js', 'scss'];
 
-    ['twig', 'js', 'scss'].forEach(function (ext) {
+    // src
+    this.fs.copyTpl(
+      that.templatePath('src/component.json'),
+      that.destinationPath('src/component.json'),
+      data
+    );
+
+    extensions.forEach(function (ext) {
       that.fs.copyTpl(
-        that.templatePath('demo/index.' + ext),
-        that.destinationPath('demo/index.' + ext),
+        that.templatePath('src/index.' + ext),
+        that.destinationPath('src/index.' + ext),
         data
       );
     });
 
-    ['twig', 'js', 'scss'].forEach(function (ext) {
+    // test
+    ['default', 'edge-case'].forEach(function(testName) {
       that.fs.copyTpl(
-        that.templatePath('index.' + ext),
-        that.destinationPath('index.' + ext),
+        that.templatePath('test/' + testName + '/test.json'),
+        that.destinationPath('test/' + testName + '/test.json'),
         data
       );
+
+      that.fs.copyTpl(
+        that.templatePath('test/' + testName + '/index.twig.data.js'),
+        that.destinationPath('test/' + testName + '/index.twig.data.js'),
+        data
+      );
+
+      extensions.forEach(function (ext) {
+        that.fs.copyTpl(
+          that.templatePath('test/' + testName + '/index.' + ext),
+          that.destinationPath('test/' + testName + '/index.' + ext),
+          data
+        );
+      });
     });
   }
 });

@@ -1,0 +1,4 @@
+{
+  "name": "<%= componentName %>/edge-case",
+  "authors": ["<%= componentAuthors %>"]
+}
