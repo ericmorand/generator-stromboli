@@ -1,7 +1,11 @@
 const merge = require('merge');
 
+let jsConfig =  require('./plugin/javascript');
+
+jsConfig.debug = true;
+
 module.exports = {
-  componentRoot: 'src/components',
+  componentRoot: 'src',
   componentManifest: 'test.json',
   plugins: {
     css: {
@@ -21,9 +25,7 @@ module.exports = {
     js: {
       module: require('stromboli-plugin-javascript'),
       entry: 'index.js',
-      config: merge.recursive({}, require('./plugin/javascript'), {
-        debug: true
-      })
+      config: jsConfig
     }
   },
   browserSync: {

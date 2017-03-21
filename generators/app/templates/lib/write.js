@@ -15,7 +15,7 @@ let writeRenderResult = function (renderResult, output) {
     binaries: []
   };
 
-  renderResult.getDependencies().forEach(function (dependency) {
+  renderResult.dependencies.forEach(function (dependency) {
     let from = dependency;
     let to = path.join(output, path.relative(path.resolve('.'), dependency));
 
@@ -33,7 +33,7 @@ let writeRenderResult = function (renderResult, output) {
     // console.log('WILL COPY DEPENDENCY FROM', from, 'TO', to);
   });
 
-  renderResult.getBinaries().forEach(function (binary) {
+  renderResult.binaries.forEach(function (binary) {
     let data = binary.data;
     let to = path.join(output, binary.name);
 

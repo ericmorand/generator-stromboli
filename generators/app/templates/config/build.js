@@ -2,15 +2,25 @@ const merge = require('merge');
 const path = require('path');
 
 let tmpPath = 'tmp';
-let distPath = '/dist';
+let distPath = 'dist';
+
+let jsConfig =  require('./plugin/javascript');
+
+jsConfig.transform.push(['babelify', {
+  presets: ['es2015']
+}]);
+
+jsConfig.transform.push(['uglifyify', {
+  global: true
+}]);
 
 module.exports = {
-  componentRoot: 'src/components',
+  componentRoot: 'src',
   componentManifest: 'component.json',
   plugins: {
     js: {
       module: require('stromboli-plugin-javascript'),
-      config: merge.recursive({}, require('./plugin/javascript')),
+      config: jsConfig,
       entry: 'index.js'
     },
     css: {

@@ -43,10 +43,14 @@ class Builder extends Stromboli {
     let that = this;
     let pluginRenderComponent = super.pluginRenderComponent;
 
+    that.warn('> ', plugin.name, 'rendering of', component.name, 'started');
+
     return that.pluginPreRenderComponent(plugin, component).then(
       function () {
         return pluginRenderComponent.call(that, plugin, component).then(
           function (component) {
+            that.warn('< ', plugin.name, 'rendering of', component.name, 'finished');
+
             // write plugin render result browser-sync server directory
             let renderResult = component.renderResults.get(plugin.name);
 
@@ -54,7 +58,7 @@ class Builder extends Stromboli {
               function (files) {
                 // watch dependencies
                 let watcher = null;
-                let dependencies = Array.from(renderResult.getDependencies());
+                let dependencies = Array.from(renderResult.dependencies);
 
                 if (!that.componentsWatchers.has(component.name)) {
                   that.componentsWatchers.set(component.name, new Map());
