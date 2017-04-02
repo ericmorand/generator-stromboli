@@ -1,8 +1,8 @@
-const ComponentsBuilder = require('./components-builder');
+const Builder = require('./builder');
 const path = require('path');
 const log = require('log-util');
 
-class Builder extends ComponentsBuilder {
+class StyleguideBuilder extends Builder {
   start(config) {
     let that = this;
     let title = 'Styleguide';
@@ -10,8 +10,6 @@ class Builder extends ComponentsBuilder {
     that.warn(('=').repeat(title.length));
     that.warn(title);
     that.warn(('=').repeat(title.length));
-
-    that.config = config;
 
     return super.start(config).then(
       function (components) {
@@ -36,4 +34,4 @@ class Builder extends ComponentsBuilder {
   };
 }
 
-module.exports = Builder;
+module.exports = StyleguideBuilder;

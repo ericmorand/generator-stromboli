@@ -19,8 +19,7 @@ const Stromboli = require('stromboli');
 let componentsBuilderConfig = require('./config/build');
 let componentsBuilderRoot = componentsBuilderConfig.componentRoot;
 
-let write = require('./lib/write');
-let tmpPath = 'tmp';
+let writer = require('./lib/writer');
 
 let componentsBuilder = new Stromboli();
 
@@ -54,7 +53,7 @@ fsEmptyDir(componentsBuilderConfig.paths.dist).then(
         });
 
         // create the final component
-        let tmpPath = path.join('tmp', 'build');
+        let tmpPath = path.join(componentsBuilderConfig.paths.tmp, 'build');
         let promises = [];
 
         plugins.forEach(function (plugin) {
@@ -92,7 +91,7 @@ fsEmptyDir(componentsBuilderConfig.paths.dist).then(
             componentsBuilder.start(componentsBuilderConfig).then(
               function (components) {
                 // write
-                return write.writeComponents(components, componentsBuilderConfig.paths.dist).then(
+                return writer.writeComponents(components, componentsBuilderConfig.paths.dist).then(
                   function () {
                     let processStylesheet = function (stylesheet) {
                       let config = componentsBuilderConfig;
@@ -132,14 +131,14 @@ fsEmptyDir(componentsBuilderConfig.paths.dist).then(
 
                     // css
                     components.forEach(function (component) {
-                      let stylesheet = path.join(componentsBuilderConfig.paths.dist, component.name, 'index.css');
+                      let stylesheet = path.join(componentsBuilderConfig.paths.dist, component.name, 'wide.css');
 
                       promises.push(finalizeStylesheet(stylesheet));
                     });
 
                     // js
                     components.forEach(function (component) {
-                      let script = path.join(componentsBuilderConfig.paths.dist, component.name, 'index.js');
+                      let script = path.join(componentsBuilderConfig.paths.dist, component.name, 'wide.js');
 
                       promises.push(finalizeScript(script));
                     });
@@ -172,7 +171,13 @@ fsEmptyDir(componentsBuilderConfig.paths.dist).then(
                           promises.push(fsRemove(path.join(componentsBuilderConfig.paths.dist, component.name)));
                         });
 
-                        return Promise.all(promises);
+                        promises.push(fsRemove(path.join(componentsBuilderConfig.paths.dist, componentsBuilderConfig.paths.tmp)));
+
+                        return Promise.all(promises).then(
+                          function () {
+                            componentsBuilder.warn('> DONE');
+                          }
+                        );
                       },
                       function (err) {
                         console.log(err);

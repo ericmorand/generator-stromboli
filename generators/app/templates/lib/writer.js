@@ -2,10 +2,11 @@
 
 const fs = require('fs-extra');
 const path = require('path');
+const url = require('url');
 
 const Promise = require('promise');
-const fsCopy = Promise.denodeify(fs.copy, 2);
-const fsOutputFile = Promise.denodeify(fs.outputFile, 3);
+const fsOutputFile = Promise.denodeify(fs.outputFile);
+const fsReadFile = Promise.denodeify(fs.readFile);
 
 let writeRenderResult = function (renderResult, output) {
   let promises = [];
@@ -15,22 +16,27 @@ let writeRenderResult = function (renderResult, output) {
     binaries: []
   };
 
-  renderResult.dependencies.forEach(function (dependency) {
-    let from = dependency;
+  let dependencies = renderResult.binaryDependencies.concat(renderResult.sourceDependencies);
+
+  dependencies.forEach(function (dependency) {
+    let dependencyUrl = url.parse(dependency);
+    let from = dependencyUrl.search ? dependencyUrl.pathname : dependency;
     let to = path.join(output, path.relative(path.resolve('.'), dependency));
 
-    promises.push(fsCopy(from, to).then(
-      function () {
-        result.dependencies.push(to);
+    promises.push(fsReadFile(from).then(
+      function (data) {
+        return fsOutputFile(to, data).then(
+          function () {
+            result.dependencies.push(to);
 
-        return to;
+            return to;
+          }
+        )
       },
       function (err) {
-        console.log(err);
-      }
-    ));
-
-    // console.log('WILL COPY DEPENDENCY FROM', from, 'TO', to);
+        return true;
+      })
+    );
   });
 
   renderResult.binaries.forEach(function (binary) {
@@ -44,7 +50,7 @@ let writeRenderResult = function (renderResult, output) {
         return to;
       },
       function (err) {
-        console.log(err);
+        return true;
       }
     ));
   });

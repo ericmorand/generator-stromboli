@@ -2,14 +2,9 @@ const merge = require('merge');
 const Promise = require('promise');
 const TwigPlugin = require('stromboli-plugin-twig');
 
-class MyTwigPlugin extends TwigPlugin {
-  getData(template) {
-    let result = {
-      files: [],
-      data: this.config.data
-    };
-
-    return Promise.resolve(result);
+class StyleguideTwigPlugin extends TwigPlugin {
+  getData(file) {
+    return Promise.resolve(this.config.data);
   }
 }
 
@@ -31,7 +26,7 @@ module.exports = {
       }
     },
     index: {
-      module: MyTwigPlugin,
+      module: StyleguideTwigPlugin,
       entry: 'index.twig',
       config: {}
     },
