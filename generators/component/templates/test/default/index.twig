@@ -8,13 +8,14 @@
 </head>
 <body class="{{ demo.class }}">
 <div>
+  <h1 class="{{ demo.class }}--title">
+    {{ demo.title }}
+  </h1>
   {% for fixture in fixtures %}
     <div class="{{ demo.class }}--fixture">
-      <h1>{{ fixture.title }}</h1>
+      <h2>{{ fixture.title }}</h2>
       <div>
-        {% include '../../src/index.twig' with {
-        content: fixture.content
-        } %}
+        {% include '../../src/index.twig' with fixture.content %}
       </div>
     </div>
   {% endfor %}

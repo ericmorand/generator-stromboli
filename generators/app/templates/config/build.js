@@ -1,10 +1,7 @@
-const merge = require('merge');
+const merge = require('deepmerge');
 const path = require('path');
 
-let tmpPath = 'tmp';
-let distPath = 'dist';
-
-let jsConfig =  require('./plugin/javascript');
+let jsConfig = require('./plugin/javascript');
 
 jsConfig.transform.push(['babelify', {
   presets: ['es2015']
@@ -13,6 +10,36 @@ jsConfig.transform.push(['babelify', {
 jsConfig.transform.push(['uglifyify', {
   global: true
 }]);
+
+class TwigDepsPlugin {
+  render(entry, output) {
+    return new Promise(function (fulfill, reject) {
+      const TwigDeps = require('twig-deps');
+
+      let renderResult = {
+        sourceDependencies: []
+      };
+
+      let depper = new TwigDeps();
+
+      require('../src/drupal/twig-extend')(depper.twig);
+
+      depper.on('data', function (dep) {
+        renderResult.sourceDependencies.push(dep);
+      });
+
+      depper.on('error', function (err) {
+        console.log('ERR', err);
+      });
+
+      depper.on('finish', function (dep) {
+        fulfill(renderResult);
+      });
+
+      depper.end(entry);
+    });
+  }
+}
 
 module.exports = {
   componentRoot: 'src',
@@ -25,46 +52,15 @@ module.exports = {
     },
     css: {
       module: require('stromboli-plugin-sass'),
-      config: merge.recursive({}, require('./plugin/sass'), {
+      config: merge({}, require('./plugin/sass'), {
         sourceMap: false,
         sourceComments: false
       }),
       entry: 'index.scss'
     },
     html: {
-      module: require('stromboli-plugin-twig'),
-      entry: 'index.twig',
-      config: merge.recursive({}, require('./plugin/twig'))
+      module: TwigDepsPlugin,
+      entry: 'index.twig'
     }
-  },
-  postcss: {
-    plugins: [
-      require('cssnano')({
-        discardDuplicates: true
-      }),
-      require('postcss-copy')({
-        src: path.resolve('.'),
-        dest: distPath,
-        inputPath: function (decl) {
-          return path.resolve('.');
-        },
-        template: function (fileMeta) {
-          return 'assets/' + fileMeta.hash + '.' + fileMeta.ext;
-        },
-        relativePath: function (dirname, fileMeta, result, options) {
-          return path.dirname(fileMeta.sourceInputFile);
-        },
-        hashFunction: function (contents) {
-          // sha256
-          const createSha = require('sha.js');
-
-          return createSha('sha256').update(contents).digest('hex');
-        }
-      })
-    ]
-  },
-  paths: {
-    tmp: tmpPath,
-    dist: distPath
   }
 };

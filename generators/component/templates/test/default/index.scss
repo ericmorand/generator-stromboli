@@ -1,4 +1,12 @@
 @import "../../src/index";
 
 .<%= componentCleanName %>--demo {
+  &--title {
+    text-align: center;
+  }
+
+  &--fixture {
+    border-top: solid 1px #ededed;
+    padding-top: 1em;
+  }
 }

@@ -69,12 +69,20 @@ module.exports = yeoman.Base.extend({
     });
 
     // test
-    ['default', 'edge-case'].forEach(function(testName) {
-      that.fs.copyTpl(
-        that.templatePath('test/' + testName + '/test.json'),
-        that.destinationPath('test/' + testName + '/test.json'),
-        data
-      );
+    ['default', 'test-case'].forEach(function(testName) {
+      if (testName === 'test-case') {
+        that.fs.copyTpl(
+          that.templatePath('test/' + testName + '/test.json'),
+          that.destinationPath('test/' + testName + '/test.json'),
+          data
+        );
+
+        that.fs.copyTpl(
+          that.templatePath('test/' + testName + '/fixtures'),
+          that.destinationPath('test/' + testName + '/fixtures'),
+          data
+        );
+      }
 
       that.fs.copyTpl(
         that.templatePath('test/' + testName + '/index.twig.data.js'),
