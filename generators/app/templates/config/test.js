@@ -1,11 +1,20 @@
 const merge = require('merge');
 
-let jsConfig =  require('./plugin/javascript');
+let localConfig;
+
+try {
+  localConfig = require('./test.local');
+}
+catch (err) {
+  localConfig = {};
+}
+
+let jsConfig = require('./plugin/javascript');
 
 jsConfig.debug = true;
 
-module.exports = {
-  componentRoot: 'src',
+module.exports = merge.recursive({
+  componentRoot: 'test',
   componentManifest: 'test.json',
   plugins: {
     css: {
@@ -44,4 +53,4 @@ module.exports = {
       stabilityThreshold: 100
     }
   }
-};
+}, localConfig);

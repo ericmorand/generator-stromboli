@@ -4,22 +4,24 @@ let assert = require('yeoman-assert');
 let helpers = require('yeoman-test');
 let fs = require('fs-extra');
 
-describe('generator-stromboli:component', function () {
+describe('generator-stromboli:test-case', function () {
   let files = [
-    'component.json',
+    'fixtures/index.js',
     'index.js',
     'index.scss',
-    'index.twig'
+    'index.twig',
+    'index.twig.data.js',
+    'test.json'
   ];
 
   let prompts = {
-    componentName: 'lorem-ipsum/dolor',
-    componentDescription: 'Lorem ipsum dolor sit amet',
-    componentAuthor: 'Lorem IPSUM'
+    testCaseName: 'dolor/sit-amet',
+    testCaseDescription: 'Sit amet',
+    testCaseAuthor: 'Lorem IPSUM'
   };
 
   it('creates files', function () {
-    return helpers.run(path.join(__dirname, '../generators/component'))
+    return helpers.run(path.join(__dirname, '../generators/test-case'))
       .inTmpDir(function (dir) {
         let componentDir = path.join(dir, 'lorem');
 
@@ -33,7 +35,7 @@ describe('generator-stromboli:component', function () {
         assert.file(files);
 
         files.forEach(function (file) {
-          let wanted = fs.readFileSync(path.resolve(path.join(__dirname, 'component/wanted/', file)), 'utf8');
+          let wanted = fs.readFileSync(path.resolve(path.join(__dirname, 'test-case/wanted/', file)), 'utf8');
 
           assert.fileContent(file, wanted.toString());
         });

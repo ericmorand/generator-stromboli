@@ -19,24 +19,26 @@ let writeRenderResult = function (renderResult, output) {
   let dependencies = renderResult.binaryDependencies.concat(renderResult.sourceDependencies);
 
   dependencies.forEach(function (dependency) {
-    let dependencyUrl = url.parse(dependency);
-    let from = dependencyUrl.search ? dependencyUrl.pathname : dependency;
-    let to = path.join(output, path.relative(path.resolve('.'), dependency));
+    if (dependency !== renderResult.source) {
+      let dependencyUrl = url.parse(dependency);
+      let from = dependencyUrl.search ? dependencyUrl.pathname : dependency;
+      let to = path.join(output, path.relative(path.resolve('.'), dependency));
 
-    promises.push(fsReadFile(from).then(
-      function (data) {
-        return fsOutputFile(to, data).then(
-          function () {
-            result.dependencies.push(to);
+      promises.push(fsReadFile(from).then(
+        function (data) {
+          return fsOutputFile(to, data).then(
+            function () {
+              result.dependencies.push(to);
 
-            return to;
-          }
-        )
-      },
-      function (err) {
-        return true;
-      })
-    );
+              return to;
+            }
+          )
+        },
+        function (err) {
+          return true;
+        })
+      );
+    }
   });
 
   renderResult.binaries.forEach(function (binary) {

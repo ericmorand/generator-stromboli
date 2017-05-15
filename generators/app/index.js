@@ -47,6 +47,7 @@ module.exports = yeoman.Base.extend({
     this.fs.copy(this.templatePath('lib/'), this.destinationPath('lib/'));
     this.fs.copy(this.templatePath('src/'), this.destinationPath('src/'));
     this.fs.copy(this.templatePath('styleguide/'), this.destinationPath('styleguide/'));
+    this.fs.copy(this.templatePath('test/'), this.destinationPath('test/'));
   },
 
   writing: function () {

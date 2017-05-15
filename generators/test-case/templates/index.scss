@@ -1,6 +1,4 @@
-@import "../../src/index";
-
-.<%= componentCleanName %>--demo {
+.<%= testCaseCleanName %>--demo {
   &--title {
     text-align: center;
   }

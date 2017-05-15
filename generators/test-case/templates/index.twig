@@ -15,7 +15,7 @@
     <div class="{{ demo.class }}--fixture">
       <h2>{{ fixture.title }}</h2>
       <div>
-        {% include '../../src/index.twig' with fixture.content %}
+        {{ fixture.content }}
       </div>
     </div>
   {% endfor %}

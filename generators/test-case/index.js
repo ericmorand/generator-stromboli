@@ -11,26 +11,26 @@ module.exports = yeoman.Base.extend({
   prompting: function () {
     // Have Yeoman greet the user.
     this.log(yosay(
-      'Welcome to the ' + chalk.red('Stromboli component') + ' generator!'
+      'Welcome to the ' + chalk.red('Stromboli test-case') + ' generator!'
     ));
 
     var prompts = [
       {
         type: 'input',
-        name: 'componentName',
-        message: 'Name of the component',
+        name: 'testCaseName',
+        message: 'Name of the test-case',
         default: path.basename(this.contextRoot)
       },
       {
         type: 'input',
-        name: 'componentDescription',
-        message: 'Description of the component',
+        name: 'testCaseDescription',
+        message: 'Description of the test-case',
         default: path.basename(this.contextRoot)
       },
       {
         type: 'input',
-        name: 'componentAuthor',
-        message: 'Author of the component',
+        name: 'testCaseAuthor',
+        message: 'Author of the test-case',
         store: true
       }
     ];
@@ -43,20 +43,25 @@ module.exports = yeoman.Base.extend({
 
   writing: function () {
     var data = {
-      componentName: this.props.componentName,
-      componentDescription: this.props.componentDescription,
-      componentVersion: '0.1.0',
-      componentAuthors: this.props.componentAuthor,
-      componentCleanName: getSlug(this.props.componentName, '--')
+      testCaseName: this.props.testCaseName,
+      testCaseDescription: this.props.testCaseDescription,
+      testCaseVersion: '0.1.0',
+      testCaseAuthors: this.props.testCaseAuthor,
+      testCaseCleanName: getSlug(this.props.testCaseName, '--')
     };
 
     var that = this;
     var extensions = ['twig', 'js', 'scss'];
 
-    // src
-    this.fs.copyTpl(
-      that.templatePath('component.json'),
-      that.destinationPath('component.json'),
+    that.fs.copyTpl(
+      that.templatePath('fixtures/index.js'),
+      that.destinationPath('fixtures/index.js'),
+      data
+    );
+
+    that.fs.copyTpl(
+      that.templatePath('test.json'),
+      that.destinationPath('test.json'),
       data
     );
 
@@ -67,5 +72,11 @@ module.exports = yeoman.Base.extend({
         data
       );
     });
+
+    that.fs.copyTpl(
+      that.templatePath('index.twig.data.js'),
+      that.destinationPath('index.twig.data.js'),
+      data
+    );
   }
 });

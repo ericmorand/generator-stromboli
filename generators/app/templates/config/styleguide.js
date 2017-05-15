@@ -1,6 +1,16 @@
+const fs = require('fs');
 const merge = require('merge');
 const Promise = require('promise');
 const TwigPlugin = require('stromboli-plugin-twig');
+
+let localConfig;
+
+try {
+  localConfig = require('./styleguide.local');
+}
+catch (err) {
+  localConfig = {};
+}
 
 class StyleguideTwigPlugin extends TwigPlugin {
   getData(file) {
@@ -8,7 +18,7 @@ class StyleguideTwigPlugin extends TwigPlugin {
   }
 }
 
-module.exports = {
+module.exports = merge.recursive({
   componentRoot: 'styleguide',
   componentManifest: 'component.json',
   plugins: {
@@ -54,4 +64,4 @@ module.exports = {
       port: 3001
     }
   }
-};
+}, localConfig);

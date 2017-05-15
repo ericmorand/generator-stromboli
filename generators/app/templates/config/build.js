@@ -1,15 +1,22 @@
-const merge = require('deepmerge');
+const merge = require('merge');
 const path = require('path');
 
-let jsConfig = require('./plugin/javascript');
+let localConfig;
 
-jsConfig.transform.push(['babelify', {
-  presets: ['es2015']
-}]);
+try {
+  localConfig = require('./build.local');
+}
+catch (err) {
+  localConfig = {};
+}
+
+let jsConfig = require('./plugin/javascript');
 
 jsConfig.transform.push(['uglifyify', {
   global: true
 }]);
+
+jsConfig.plugin.push('bundle-collapser/plugin');
 
 class TwigDepsPlugin {
   render(entry, output) {
@@ -21,8 +28,6 @@ class TwigDepsPlugin {
       };
 
       let depper = new TwigDeps();
-
-      require('../src/drupal/twig-extend')(depper.twig);
 
       depper.on('data', function (dep) {
         renderResult.sourceDependencies.push(dep);
@@ -41,7 +46,7 @@ class TwigDepsPlugin {
   }
 }
 
-module.exports = {
+module.exports = merge.recursive({
   componentRoot: 'src',
   componentManifest: 'component.json',
   plugins: {
@@ -52,7 +57,7 @@ module.exports = {
     },
     css: {
       module: require('stromboli-plugin-sass'),
-      config: merge({}, require('./plugin/sass'), {
+      config: merge.recursive({}, require('./plugin/sass'), {
         sourceMap: false,
         sourceComments: false
       }),
@@ -62,5 +67,6 @@ module.exports = {
       module: TwigDepsPlugin,
       entry: 'index.twig'
     }
-  }
-};
+  },
+  distPath: 'dist'
+}, localConfig);

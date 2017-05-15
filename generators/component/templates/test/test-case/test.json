@@ -1,4 +1,0 @@
-{
-  "name": "<%= componentName %>/test-case",
-  "authors": ["<%= componentAuthors %>"]
-}
