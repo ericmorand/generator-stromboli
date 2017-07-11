@@ -1,4 +1,4 @@
-const merge = require('merge');
+const merge = require('deepmerge');
 const path = require('path');
 
 let localConfig;
@@ -13,10 +13,13 @@ catch (err) {
 let jsConfig = require('./plugin/javascript');
 
 jsConfig.transform.push(['uglifyify', {
-  global: true
+  global: true,
+  compress: {
+    drop_console: true
+  }
 }]);
 
-jsConfig.plugin.push('bundle-collapser/plugin');
+jsConfig.plugin.push(['bundle-collapser/plugin']);
 
 class TwigDepsPlugin {
   render(entry, output) {
@@ -46,9 +49,9 @@ class TwigDepsPlugin {
   }
 }
 
-module.exports = merge.recursive({
-  componentRoot: 'src',
-  componentManifest: 'component.json',
+module.exports = merge({
+  componentRoot: '<%= componentRoot %>',
+  componentManifest: '<%= componentManifest %>',
   plugins: {
     js: {
       module: require('stromboli-plugin-javascript'),
@@ -57,7 +60,7 @@ module.exports = merge.recursive({
     },
     css: {
       module: require('stromboli-plugin-sass'),
-      config: merge.recursive({}, require('./plugin/sass'), {
+            config: merge({}, require('./plugin/sass'), {
         sourceMap: false,
         sourceComments: false
       }),

@@ -1,10 +1,5 @@
-.<%= testCaseCleanName %>--demo {
-  &--title {
-    text-align: center;
-  }
+@import "../index";
 
-  &--fixture {
-    border-top: solid 1px #ededed;
-    padding-top: 1em;
-  }
+.<%= testCaseCleanName %>--demo {
+
 }

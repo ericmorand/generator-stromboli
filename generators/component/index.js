@@ -19,13 +19,15 @@ module.exports = yeoman.Base.extend({
         type: 'input',
         name: 'componentName',
         message: 'Name of the component',
-        default: path.basename(this.contextRoot)
+        validate: function(input) {
+          return input.length > 0;
+        },
+        store: true
       },
       {
         type: 'input',
         name: 'componentDescription',
-        message: 'Description of the component',
-        default: path.basename(this.contextRoot)
+        message: 'Description of the component'
       },
       {
         type: 'input',
@@ -42,12 +44,17 @@ module.exports = yeoman.Base.extend({
   },
 
   writing: function () {
+    var componentRoot = this.config.get('componentRoot');
+    var componentManifest = this.config.get('componentManifest');
+    var testComponentRoot = this.config.get('testComponentRoot');
+    var testComponentManifest = this.config.get('testComponentManifest');
+
     var data = {
       componentName: this.props.componentName,
       componentDescription: this.props.componentDescription,
       componentVersion: '0.1.0',
       componentAuthors: this.props.componentAuthor,
-      componentCleanName: getSlug(this.props.componentName, '--')
+      componentCleanName: getSlug(this.props.componentName, '--'),
     };
 
     var that = this;
@@ -55,17 +62,44 @@ module.exports = yeoman.Base.extend({
 
     // src
     this.fs.copyTpl(
-      that.templatePath('component.json'),
-      that.destinationPath('component.json'),
+      that.templatePath('src', 'manifest.json'),
+      that.destinationPath(componentRoot, data.componentName, componentManifest),
       data
     );
 
     extensions.forEach(function (ext) {
       that.fs.copyTpl(
-        that.templatePath('index.' + ext),
-        that.destinationPath('index.' + ext),
+        that.templatePath('src', `index.${ext}`),
+        that.destinationPath(componentRoot, data.componentName, `index.${ext}`),
         data
       );
     });
+
+    // test
+    that.fs.copyTpl(
+      that.templatePath('test', 'fixtures/index.js'),
+      that.destinationPath(testComponentRoot, data.componentName, 'fixtures/index.js'),
+      data
+    );
+
+    that.fs.copyTpl(
+      that.templatePath('test', 'manifest.json'),
+      that.destinationPath(testComponentRoot, data.componentName, testComponentManifest),
+      data
+    );
+
+    extensions.forEach(function (ext) {
+      that.fs.copyTpl(
+        that.templatePath('test', 'index.' + ext),
+        that.destinationPath(testComponentRoot, data.componentName, 'index.' + ext),
+        data
+      );
+    });
+
+    that.fs.copyTpl(
+      that.templatePath('test', 'index.twig.data.js'),
+      that.destinationPath(testComponentRoot, data.componentName, 'index.twig.data.js'),
+      data
+    );
   }
 });

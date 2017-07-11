@@ -6,7 +6,7 @@ const log = require('log-util');
 const merge = require('merge');
 const path = require('path');
 
-const chokidar = require('chokidar');
+const Gaze = require('gaze').Gaze;
 const Builder = require('./lib/builder');
 const MasterBuilder = require('./lib/master-builder');
 const StyleguideBuilder = require('./lib/styleguide-builder');
@@ -15,12 +15,16 @@ const BrowserSync = require('browser-sync');
 const builderConfig = require('./config/test');
 const styleguideBuilderConfig = require('./config/styleguide');
 
+if (process.argv[2]) {
+  builderConfig.componentRoot = path.join(builderConfig.componentRoot, process.argv[2]);
+}
+
 if (cluster.isMaster) {
   let builder = new MasterBuilder();
   let watchers = new Map();
 
   let initWatcher = function (component, plugin, files, worker) {
-    let watcher = chokidar.watch(files, builderConfig.chokidar).on('all', function (type, file) {
+    let watcher = new Gaze(files, builderConfig.watcher).on('all', function (type, file) {
       builder.info(file, type);
 
       worker.send({

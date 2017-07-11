@@ -1,5 +1,5 @@
 const fs = require('fs');
-const merge = require('merge');
+const merge = require('deepmerge');
 const Promise = require('promise');
 const TwigPlugin = require('stromboli-plugin-twig');
 
@@ -18,7 +18,7 @@ class StyleguideTwigPlugin extends TwigPlugin {
   }
 }
 
-module.exports = merge.recursive({
+module.exports = merge({
   componentRoot: 'styleguide',
   componentManifest: 'component.json',
   plugins: {
@@ -48,11 +48,8 @@ module.exports = merge.recursive({
       }
     }
   },
-  chokidar: {
-    ignoreInitial: true,
-    awaitWriteFinish: {
-      stabilityThreshold: 100
-    }
+  watcher: {
+    debounceDelay: 100
   },
   browserSync: {
     port: 3000,

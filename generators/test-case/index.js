@@ -17,15 +17,25 @@ module.exports = yeoman.Base.extend({
     var prompts = [
       {
         type: 'input',
+        name: 'componentName',
+        message: 'Name of the component',
+        validate: function (input) {
+          return input.length > 0;
+        },
+        store: true
+      },
+      {
+        type: 'input',
         name: 'testCaseName',
         message: 'Name of the test-case',
-        default: path.basename(this.contextRoot)
+        validate: function (input) {
+          return input.length > 0;
+        }
       },
       {
         type: 'input',
         name: 'testCaseDescription',
-        message: 'Description of the test-case',
-        default: path.basename(this.contextRoot)
+        message: 'Description of the test-case'
       },
       {
         type: 'input',
@@ -42,40 +52,45 @@ module.exports = yeoman.Base.extend({
   },
 
   writing: function () {
+    var componentRoot = this.config.get('componentRoot');
+    var componentManifest = this.config.get('componentManifest');
+    var testComponentRoot = this.config.get('testComponentRoot');
+    var testComponentManifest = this.config.get('testComponentManifest');
+
     var data = {
-      testCaseName: this.props.testCaseName,
+      testCaseName: [
+        this.props.componentName,
+        this.props.testCaseName
+      ].join('/'),
       testCaseDescription: this.props.testCaseDescription,
       testCaseVersion: '0.1.0',
       testCaseAuthors: this.props.testCaseAuthor,
-      testCaseCleanName: getSlug(this.props.testCaseName, '--')
+      testCaseCleanName: getSlug([
+        this.props.componentName,
+        this.props.testCaseName
+      ].join('/'), '--')
     };
 
     var that = this;
     var extensions = ['twig', 'js', 'scss'];
 
     that.fs.copyTpl(
-      that.templatePath('fixtures/index.js'),
-      that.destinationPath('fixtures/index.js'),
-      data
-    );
-
-    that.fs.copyTpl(
-      that.templatePath('test.json'),
-      that.destinationPath('test.json'),
+      that.templatePath('manifest.json'),
+      that.destinationPath(testComponentRoot, data.testCaseName, testComponentManifest),
       data
     );
 
     extensions.forEach(function (ext) {
       that.fs.copyTpl(
         that.templatePath('index.' + ext),
-        that.destinationPath('index.' + ext),
+        that.destinationPath(testComponentRoot, data.testCaseName, 'index.' + ext),
         data
       );
     });
 
     that.fs.copyTpl(
       that.templatePath('index.twig.data.js'),
-      that.destinationPath('index.twig.data.js'),
+      that.destinationPath(testComponentRoot, data.testCaseName, 'index.twig.data.js'),
       data
     );
   }

@@ -1,4 +1,4 @@
-const merge = require('merge');
+const merge = require('deepmerge');
 
 let localConfig;
 
@@ -13,13 +13,13 @@ let jsConfig = require('./plugin/javascript');
 
 jsConfig.debug = true;
 
-module.exports = merge.recursive({
-  componentRoot: 'test',
-  componentManifest: 'test.json',
+module.exports = merge({
+  componentRoot: '<%= testComponentRoot %>',
+  componentManifest: '<%= testComponentManifest %>',
   plugins: {
     css: {
       module: require('stromboli-plugin-sass'),
-      config: merge.recursive({}, require('./plugin/sass'), {
+      config: merge({}, require('./plugin/sass'), {
         sourceMap: true,
         sourceComments: true,
         sourceMapEmbed: true
@@ -29,7 +29,7 @@ module.exports = merge.recursive({
     html: {
       module: require('stromboli-plugin-twig'),
       entry: 'index.twig',
-      config: merge.recursive({}, require('./plugin/twig'))
+      config: merge({}, require('./plugin/twig'))
     },
     js: {
       module: require('stromboli-plugin-javascript'),
@@ -47,10 +47,7 @@ module.exports = merge.recursive({
       port: 3003
     }
   },
-  chokidar: {
-    ignoreInitial: true,
-    awaitWriteFinish: {
-      stabilityThreshold: 100
-    }
+  watcher: {
+    debounceDelay: 100
   }
 }, localConfig);

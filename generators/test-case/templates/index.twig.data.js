@@ -1,16 +1,13 @@
 /**
  *
- * @param renderer {{twig: Twig, render: Function}}
+ * @param renderer {{twig, render}}
  * @returns {{demo: {title: string, class: string}, fixtures: Array}}
  */
-module.exports = function (renderer) {
-  let fixtures = require('./fixtures')(renderer);
+module.exports = function(renderer) {
+  let data = require('../index.twig.data')(renderer);
 
-  return {
-    demo: {
-      title: '<%= testCaseName %> demo',
-      class: '<%= testCaseCleanName %>--demo'
-    },
-    fixtures: fixtures
-  };
+  data.demo.title = '<%= testCaseName %> demo';
+  data.demo.class = '<%= testCaseCleanName %>--demo';
+
+  return data;
 };
