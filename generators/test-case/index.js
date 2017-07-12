@@ -14,23 +14,18 @@ module.exports = yeoman.Base.extend({
       'Welcome to the ' + chalk.red('Stromboli test-case') + ' generator!'
     ));
 
+    var testComponentRoot = this.config.get('testComponentRoot');
+    var relativePathToTestComponentRoot = path.relative(testComponentRoot, this.contextRoot);
+
     var prompts = [
-      {
-        type: 'input',
-        name: 'componentName',
-        message: 'Name of the component',
-        validate: function (input) {
-          return input.length > 0;
-        },
-        store: true
-      },
       {
         type: 'input',
         name: 'testCaseName',
         message: 'Name of the test-case',
         validate: function (input) {
           return input.length > 0;
-        }
+        },
+        default: relativePathToTestComponentRoot
       },
       {
         type: 'input',
@@ -58,17 +53,11 @@ module.exports = yeoman.Base.extend({
     var testComponentManifest = this.config.get('testComponentManifest');
 
     var data = {
-      testCaseName: [
-        this.props.componentName,
-        this.props.testCaseName
-      ].join('/'),
+      testCaseName: this.props.testCaseName,
       testCaseDescription: this.props.testCaseDescription,
       testCaseVersion: '0.1.0',
       testCaseAuthors: this.props.testCaseAuthor,
-      testCaseCleanName: getSlug([
-        this.props.componentName,
-        this.props.testCaseName
-      ].join('/'), '--')
+      testCaseCleanName: getSlug(this.props.testCaseName, '--')
     };
 
     var that = this;
